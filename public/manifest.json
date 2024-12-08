@@ -8,12 +8,12 @@
   "start_url": ".",
   "icons": [
     {
-      "src": "./public/icons/cropped192.png",
+      "src": "./icons/cropped192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "./public/icons/512px-vue.png",
+      "src": "./icons/512px-vue.png",
       "sizes": "512x512",
       "type": "image/png"
     }
