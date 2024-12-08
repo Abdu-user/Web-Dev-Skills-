@@ -18,11 +18,14 @@
 
     <!-- v-if="isPhoneSize" -->
 
+    <ToggleThemeButton
+      :theme="theme"
+      class-name="me-auto"
+    />
     <NavbarLinks
       v-if="!isPhoneSize"
       className="d-flex flex-row gap-2"
     />
-    <ToggleThemeButton :theme="theme" />
     <MobileModalDropDown
       v-if="isPhoneSize"
       :childClass="`bg-${theme} px-3 pb-3 pt-1 left-3 start-negative mobileLi ${mobileComputed}`"
@@ -86,41 +89,4 @@ const isPhoneSize = ref(window.innerWidth < 576);
 
 @media (min-width: 1200px) {
 }
-/* Default position (for larger screens, no changes) */
-/* nav .navbar-nav {
-  display: flex;
-}
-
-nav .navbar-nav .nav-item {
-  display: flex;
-}
-
-/* Media query for screens smaller than 576px */
-/* @media (max-width: 576px) {
-  nav .navbar-nav {
-    flex-direction: column;
-  } */
-
-/* Move ToggleThemeButton to be the second child */
-/* nav > .navbar-toggler {
-    order: 2;
-  }
-} */
 </style>
-<!-- 
-nav .navbar-nav .nav-item:nth-child(1) {
-  order: 1; /* First child (Home) stays first */
-}
-
-nav .navbar-nav .nav-item:nth-child(2) {
-  order: 3; /* Second child (About) stays second */
-}
-
-nav .navbar-nav .nav-item:nth-child(3) {
-  order: 4; /* Third child (Contact) stays third */
-}
-
-/* Ensuring ToggleThemeButton is second */
-/* nav > .navbar-toggler + ToggleThemeButton {
-  order: 2;
-} */ -->
