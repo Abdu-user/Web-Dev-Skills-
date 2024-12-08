@@ -3,6 +3,7 @@
     role="button"
     tabindex="0"
     class="custom-hover position-relative fixed-width"
+    :class="className"
     @click="toggleTheme"
     @keyup="keyboardCheck($event, toggleTheme, { Space: true })"
     aria-label="Toggle to Light/Dark Theme"
@@ -36,10 +37,10 @@
 }
 /* Transition styles */
 .fade-enter-active {
-  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1) 0.3s;
+  transition: all 0.15s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s;
 }
 .fade-leave-active {
-  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: all 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 .fade-enter-from {
   opacity: 0;

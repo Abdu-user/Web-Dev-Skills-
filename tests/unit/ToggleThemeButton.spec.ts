@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/vue";
-import ThemeToggler from "@/components/ToggleThemeButton.vue";
 import "@testing-library/jest-dom";
+import ToggleThemeButton from "@/components/ToggleThemeButton.vue";
 
-describe("ThemeToggler.vue", () => {
+describe("ToggleThemeButton.vue", () => {
   it("renders the dark theme button when the theme is dark", async () => {
-    const { container } = render(ThemeToggler, {
+    const { container } = render(ToggleThemeButton, {
       props: { theme: "dark" },
     });
 
@@ -16,7 +16,7 @@ describe("ThemeToggler.vue", () => {
   });
 
   it("renders the light theme button when the theme is light", async () => {
-    const { container } = render(ThemeToggler, {
+    const { container } = render(ToggleThemeButton, {
       props: { theme: "light" },
     });
 
@@ -25,5 +25,14 @@ describe("ThemeToggler.vue", () => {
 
     const icon = container.querySelector(".bi-sun");
     expect(icon).toBeInTheDocument();
+  });
+  it("check if classname is passed", async () => {
+    const newClassName = "newClassName";
+    render(ToggleThemeButton, { props: { theme: "dark", className: newClassName } });
+
+    const toggleTheme = screen.getByRole("button", { name: /Toggle to Light\/Dark Theme/i });
+    expect(toggleTheme).toBeInTheDocument();
+
+    expect(toggleTheme).toHaveClass(newClassName);
   });
 });
