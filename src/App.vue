@@ -1,30 +1,57 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div
+    class="container1"
+    :class="containerClass"
+  >
+    <NavBar
+      :theme="state.theme"
+      :toggleTheme="toggleTheme"
+    />
+    <RouterView />
+  </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script setup lang="ts">
+export type ThemeType = "dark" | "light";
+export type StateType = {
+  theme: ThemeType;
+};
 
-nav {
-  padding: 30px;
-}
+import { computed, inject, onMounted, reactive } from "vue";
+import NavBar from "./components/Navbar.vue";
+import { BusType } from "./globals/bus";
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+const defaultState: StateType = {
+  theme: "light",
+};
+const getState = () => {
+  const savedState = localStorage.getItem("state");
+  if (savedState) {
+    const parsedState: StateType = JSON.parse(savedState);
+    state.theme = parsedState.theme;
+  }
+};
+const saveState = () => {
+  localStorage.setItem("state", JSON.stringify(state));
+};
+onMounted(getState);
+const state = reactive<StateType>(defaultState);
 
-nav a.router-link-exact-active {
-  color: #42b983;
+const toggleTheme = () => {
+  state.theme = state.theme === "dark" ? "light" : "dark";
+  saveState();
+};
+const bus = inject("$bus") as BusType;
+bus.$on("toggleTheme", toggleTheme);
+
+const containerClass = computed(() => {
+  return `bg-${state.theme} text-${state.theme === "dark" ? "light" : "black"}`;
+});
+</script>
+
+<style scoped>
+.container1 {
+  width: 100vw;
+  height: 100vh;
 }
 </style>
