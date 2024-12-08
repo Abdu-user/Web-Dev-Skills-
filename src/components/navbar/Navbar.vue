@@ -20,7 +20,7 @@
 
     <NavbarLinks
       v-if="!isPhoneSize"
-      className="d-flex flex-row gap-1"
+      className="d-flex flex-row gap-2"
     />
     <ToggleThemeButton :theme="theme" />
     <MobileModalDropDown
