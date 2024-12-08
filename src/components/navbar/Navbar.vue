@@ -18,7 +18,10 @@
 
     <!-- v-if="isPhoneSize" -->
 
-    <NavbarLinks v-if="!isPhoneSize" />
+    <NavbarLinks
+      v-if="!isPhoneSize"
+      className="d-flex flex-row"
+    />
     <ToggleThemeButton :theme="theme" />
     <MobileModalDropDown
       v-if="isPhoneSize"

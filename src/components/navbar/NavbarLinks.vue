@@ -1,7 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const { className } = defineProps({ className: { type: String, default: "" } });
+</script>
 
 <template>
-  <ul class="navbar-nav ms-auto">
+  <ul
+    class="navbar-nav ms-auto"
+    :class="className"
+  >
     <li class="nav-item">
       <RouterLink
         class="nav-link"
