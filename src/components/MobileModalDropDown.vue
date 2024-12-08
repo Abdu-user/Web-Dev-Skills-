@@ -13,11 +13,11 @@
       </slot>
     </button>
     <Transition name="drop-down">
+      <!-- :class="{ show: !isNavbarCollapsed }" -->
+      <!-- class="collapse navbar-collapse" -->
       <div
-        class="collapse navbar-collapse"
-        :class="{ show: !isNavbarCollapsed }"
         id="navbarContent"
-        v-show="!isNavbarCollapsed"
+        v-show="isNavbarCollapsed"
       >
         <div
           class="position-absolute"
@@ -44,11 +44,13 @@ const toggleNavbar = () => {
 </script>
 
 <style scoped>
-.drop-down-enter-from {
+.drop-down-enter-from,
+.drop-down-leave-to {
   opacity: 0;
   transform: scale(0.8);
 }
-.drop-down-enter-active {
-  transition: all 0.3s cubic-bezier(0.47, 0, 0.745, 0.715);
+.drop-down-enter-active,
+.drop-down-leave-active {
+  transition: all 0.2s cubic-bezier(0.47, 0, 0.745, 0.715);
 }
 </style>

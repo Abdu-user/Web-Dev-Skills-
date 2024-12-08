@@ -18,7 +18,7 @@ export type StateType = {
 };
 
 import { computed, inject, onMounted, reactive } from "vue";
-import NavBar from "./components/Navbar.vue";
+import NavBar from "./components/navbar//Navbar.vue";
 import { BusType } from "./globals/bus";
 
 const defaultState: StateType = {

@@ -1,3 +1,6 @@
+:root {
+  --vue-green: #28a745;
+}
 * {
   margin: 0;
   padding: 0;
@@ -5,5 +8,5 @@
 }
 a:hover,
 button:hover {
-  color: #28a745; /* Bootstrap's green color */
+  color: var(--vue-green); /* Bootstrap's green color */
 }
