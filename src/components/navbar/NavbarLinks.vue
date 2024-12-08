@@ -12,6 +12,7 @@ const { className } = defineProps({ className: { type: String, default: "" } });
         role="link"
         class="nav-link"
         :to="{ name: 'home' }"
+        active-class="activeLink"
         >Home</RouterLink
       >
     </li>
@@ -20,6 +21,7 @@ const { className } = defineProps({ className: { type: String, default: "" } });
         role="link"
         class="nav-link"
         :to="{ name: 'about' }"
+        active-class="activeLink"
         >About</RouterLink
       >
     </li>
@@ -28,6 +30,7 @@ const { className } = defineProps({ className: { type: String, default: "" } });
         role="link"
         class="nav-link"
         :to="{ name: 'contact' }"
+        active-class="activeLink"
         >Contact</RouterLink
       >
     </li>
@@ -37,6 +40,15 @@ const { className } = defineProps({ className: { type: String, default: "" } });
 <style scoped>
 a:hover,
 button:hover {
-  color: #28a745; /* Bootstrap's green color */
+  color: var(--vue-green); /* Bootstrap's green color */
+}
+.activeLink {
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+@media (min-width: 576px) {
+  .activeLink {
+    text-decoration: underline;
+  }
 }
 </style>

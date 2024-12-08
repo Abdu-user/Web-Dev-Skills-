@@ -7,6 +7,7 @@
   box-sizing: border-box;
 }
 a:hover,
-button:hover {
+button:hover,
+span:hover {
   color: var(--vue-green); /* Bootstrap's green color */
 }
