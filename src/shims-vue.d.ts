@@ -9,3 +9,4 @@ declare module "*.png" {
   export default value;
 }
 declare module "register-service-worker";
+declare module "@testing-library/vue";

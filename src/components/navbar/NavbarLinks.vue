@@ -9,6 +9,7 @@ const { className } = defineProps({ className: { type: String, default: "" } });
   >
     <li class="nav-item">
       <RouterLink
+        role="link"
         class="nav-link"
         :to="{ name: 'home' }"
         >Home</RouterLink
@@ -16,6 +17,7 @@ const { className } = defineProps({ className: { type: String, default: "" } });
     </li>
     <li class="nav-item">
       <RouterLink
+        role="link"
         class="nav-link"
         :to="{ name: 'about' }"
         >About</RouterLink
@@ -23,6 +25,7 @@ const { className } = defineProps({ className: { type: String, default: "" } });
     </li>
     <li class="nav-item">
       <RouterLink
+        role="link"
         class="nav-link"
         :to="{ name: 'contact' }"
         >Contact</RouterLink

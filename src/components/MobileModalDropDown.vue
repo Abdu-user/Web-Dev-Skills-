@@ -16,15 +16,13 @@
       <!-- :class="{ show: !isNavbarCollapsed }" -->
       <!-- class="collapse navbar-collapse" -->
       <div
+        role="region"
         id="navbarContent"
-        v-show="isNavbarCollapsed"
+        v-if="isNavbarCollapsed"
+        class="position-absolute"
+        :class="props.childClass"
       >
-        <div
-          class="position-absolute"
-          :class="props.childClass"
-        >
-          <slot></slot>
-        </div>
+        <slot></slot>
       </div>
     </Transition>
   </div>

@@ -16,16 +16,18 @@
       <span class="ms-2">Vue App</span>
     </a>
 
-    <!-- v-if="isPhoneSize" -->
-
     <ToggleThemeButton
-      :theme="theme"
-      class-name="me-auto"
+    :theme="theme"
+    class-name="me-auto"
     />
+    
+    <!-- NavLinks -->
     <NavbarLinks
-      v-if="!isPhoneSize"
-      className="d-flex flex-row gap-2"
+    v-if="!isPhoneSize"
+    className="d-flex flex-row gap-2"
     />
+    
+    <!-- v-if="isPhoneSize" -->
     <MobileModalDropDown
       v-if="isPhoneSize"
       :childClass="`bg-${theme} px-3 pb-3 pt-1 left-3 start-negative mobileLi ${mobileComputed}`"
