@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg shadow-lg col-12 z-0 top-0 position-sticky opacity-100 px-md-4"
+    class="navbar navbar-expand-lg shadow-lg p-3 z-1 col-12 position-sticky opacity-100 px-md-4"
     :class="containerClass"
   >
     <a
@@ -80,8 +80,11 @@ const isPhoneSize = ref(window.innerWidth < 576);
   border-bottom: 1px solid var(--vue-green);
 }
 /* Optional custom styles */
-.navbar {
+/* .navbar {
   padding: 0.75rem;
+} */
+nav {
+  top: -1px !important;
 }
 
 @media (max-width: 576px) {

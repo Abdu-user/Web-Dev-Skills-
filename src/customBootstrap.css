@@ -1,0 +1,12 @@
+.w-35 {
+  width: 35%;
+}
+.flex-grow-5 {
+  flex-grow: 0.5;
+}
+
+@media (min-width: 768px) {
+  .w-md-35 {
+    width: 35% !important;
+  }
+}

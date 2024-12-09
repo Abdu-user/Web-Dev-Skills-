@@ -1,13 +1,18 @@
 :root {
   --vue-green: #28a745;
 }
-* {
+*,
+html,
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+body {
+  /* overflow: clip; */
+  margin-top: -5px;
+}
 a:hover,
-button:hover,
-span:hover {
+button:hover span.link:hover {
   color: var(--vue-green); /* Bootstrap's green color */
 }
