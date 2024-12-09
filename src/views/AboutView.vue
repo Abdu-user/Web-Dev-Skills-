@@ -1,4 +1,5 @@
 <template>
+  <!-- <StickyNav /> -->
   <header class="text-center py-4">
     <!-- :class="" -->
     <h1 class="h2">About Abdurrakhman</h1>
@@ -6,7 +7,7 @@
   <main class="container my-5">
     <section class="row align-items-center">
       <!-- Image Section -->
-      <div class="col-12 col-md-6 text-center mb-4 mb-md-0">
+      <div class="col-12 col-md-6 text-center mb-4">
         <img
           src="../assets/person.jpg"
           alt="a nice looking person looking towards you"
@@ -26,13 +27,53 @@
         </p> -->
       </div>
     </section>
-    <section class="row align-items-center">
+    <hr />
+    <section class="row align-items-center mt-5">
       <!-- Images section -->
-      <div class="col-12 col-md-6 text-center mb-4 mb-md-0"></div>
+      <div class="col-12 col-md-6 text-center mb-4 mb-md-0 d-flex flex-wrap gap-3">
+        <img
+          v-for="(logo, index) in companiesLogos"
+          :key="index"
+          :src="logo.src"
+          :alt="logo.alt"
+          class="w-25 rounded flex-grow-5 flex-shrink-1"
+        />
+      </div>
     </section>
   </main>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+type ImgType = {
+  src: string;
+  alt: string;
+};
+import HTMLLogo from "../assets/html-logo.png";
+import CSSLogo from "../assets/css-logo.png";
+import JSLogo from "../assets/js-logo.png";
+import VueLogo from "../assets/logo.png";
+const companiesLogos: ImgType[] = [
+  {
+    src: HTMLLogo,
+    alt: "html logo",
+  },
+  {
+    src: CSSLogo,
+    alt: "css logo",
+  },
+  {
+    src: JSLogo,
+    alt: "Javascript logo",
+  },
+  {
+    src: VueLogo,
+    alt: "Vue  logo",
+  },
+];
+</script>
 
-<style scoped></style>
+<style scoped>
+.flex-grow-5 {
+  flex-grow: 0.5;
+}
+</style>

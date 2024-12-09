@@ -13,7 +13,7 @@ describe("MobileModalDropDown.vue", () => {
     expect(toggleButton).toBeInTheDocument();
 
     // Check if the navbar content is initially hidden
-    const navbarContent = screen.queryByRole("region", { hidden: true });
+    const navbarContent = screen.queryByRole("region");
     expect(navbarContent).not.toBeInTheDocument();
   });
 
@@ -25,7 +25,7 @@ describe("MobileModalDropDown.vue", () => {
     });
 
     // Initially, the navbar content should not be visible
-    let navbarContent = screen.queryByRole("region", { hidden: true });
+    let navbarContent = screen.queryByRole("region");
     expect(navbarContent).not.toBeInTheDocument();
 
     // Simulate a click to open the navbar
@@ -40,7 +40,7 @@ describe("MobileModalDropDown.vue", () => {
 
     // After second click, the navbar content should be hidden again
     navbarContent = screen.queryByRole("region", { hidden: true });
-    expect(navbarContent).not.toBeInTheDocument();
+    expect(navbarContent).toBeInTheDocument();
   });
 
   it("applies the correct class to the navbar content", async () => {

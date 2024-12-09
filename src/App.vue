@@ -1,6 +1,7 @@
 <template>
   <div
-    class="container1"
+    class="overflow-auto w-100 vh-100"
+    id="window"
     :class="containerClass"
   >
     <NavBar
@@ -8,6 +9,8 @@
       :toggleTheme="toggleTheme"
     />
     <RouterView />
+    <!-- <div class="content">
+    </div> -->
   </div>
 </template>
 
@@ -50,8 +53,7 @@ const containerClass = computed(() => {
 </script>
 
 <style scoped>
-.container1 {
-  width: 100vw;
-  height: 100vh;
+div {
+  margin-top: 5px;
 }
 </style>

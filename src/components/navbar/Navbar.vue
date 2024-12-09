@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg shadow-lg"
+    class="navbar navbar-expand-lg shadow-lg col-12 z-0 top-0 position-sticky opacity-100 px-md-4"
     :class="containerClass"
   >
     <a
@@ -17,16 +17,16 @@
     </a>
 
     <ToggleThemeButton
-    :theme="theme"
-    class-name="me-auto"
+      :theme="theme"
+      class-name="me-auto"
     />
-    
+
     <!-- NavLinks -->
     <NavbarLinks
-    v-if="!isPhoneSize"
-    className="d-flex flex-row gap-2"
+      v-if="!isPhoneSize"
+      className="d-flex flex-row gap-2"
     />
-    
+
     <!-- v-if="isPhoneSize" -->
     <MobileModalDropDown
       v-if="isPhoneSize"
@@ -60,8 +60,9 @@ const isPhoneSize = ref(window.innerWidth < 576);
 <style scoped>
 /* //Mobile styles */
 ::v-deep(.start-negative) {
-  transform: translateY(15px) translateX(-28px);
   border-radius: 0.75rem;
+  left: -30px;
+  margin-top: 20px;
 }
 ::v-deep(.light-theme-shadow) {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.6);

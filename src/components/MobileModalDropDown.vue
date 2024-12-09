@@ -18,7 +18,7 @@
       <div
         role="region"
         id="navbarContent"
-        v-if="isNavbarCollapsed"
+        v-show="isNavbarCollapsed"
         class="position-absolute"
         :class="props.childClass"
       >
