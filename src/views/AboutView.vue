@@ -40,7 +40,7 @@
         >
           <a
             :href="logo.href"
-            target="_blank"
+            :target="isMobile ? '_self' : '_blank'"
             :title="`click to get info about ${logo.name}`"
           >
             <img
@@ -61,7 +61,6 @@
           >
             <a
               :href="logo.href"
-              target="_blank"
               class="h4 mb-2 custom-class"
             >
               {{ logo.name }}
@@ -77,6 +76,14 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from "vue";
+const isMobile = ref(false);
+
+onMounted(() => {
+  // Check if the device width is mobile-sized (you can adjust the width threshold)
+  isMobile.value = window.innerWidth <= 768; // or use any mobile detection logic
+});
+
 // Default Logos
 import VueLogo from "../assets/logo.png";
 import TestingLibraryLogo from "../assets/Modified-images/testing-library-logo.png";
