@@ -1,16 +1,23 @@
-// import { reactive } from "vue";
+import { reactive } from "vue";
 
-// export type ThemeType = "dark" | "light";
-// export type StateType = {
-//   theme: ThemeType;
-// };
+type ThemeType = "dark" | "light";
+interface GlobalStateType {
+  theme: ThemeType;
+  isMobile: boolean;
+}
 
-// const state = reactive<StateType>({
-//   theme: "light",
-//   // theme: "dark",
-// });
-// const toggleTheme = () => {
-//   state.theme = state.theme === "dark" ? "light" : "dark";
-// };
+const globalState = reactive<GlobalStateType>({
+  theme: "dark",
+  isMobile: false,
+});
 
-// export default state;
+const setGlobalStateProperty = <K extends keyof GlobalStateType>(key: K, value: GlobalStateType[K]) => {
+  globalState[key] = value;
+};
+const getGlobalState = () => {
+  return globalState;
+};
+
+export default globalState;
+export { setGlobalStateProperty, getGlobalState };
+export { ThemeType, GlobalStateType };

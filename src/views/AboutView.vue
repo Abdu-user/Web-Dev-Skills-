@@ -47,12 +47,15 @@
               :key="index"
               :src="logo.src"
               :alt="logo.alt"
-              class="w-100 rounded-4"
+              class="w-100 rounded-4 link-img"
             />
           </a>
         </div>
       </div>
-      <div class="col-12 col-md-8">
+      <div
+        class="col-12 col-md-8"
+        :class="globalState.theme"
+      >
         <ul class="list-unstyled">
           <li
             v-for="(logo, index) in companiesLogos"
@@ -62,6 +65,7 @@
             <a
               :href="logo.href"
               class="h4 mb-2 custom-class"
+              :target="isMobile ? '_self' : '_blank'"
             >
               {{ logo.name }}
             </a>
@@ -73,16 +77,11 @@
       </div>
     </section>
   </main>
+  <Footer />
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-const isMobile = ref(false);
-
-onMounted(() => {
-  // Check if the device width is mobile-sized (you can adjust the width threshold)
-  isMobile.value = window.innerWidth <= 768; // or use any mobile detection logic
-});
+const { isMobile } = globalState;
 
 // Default Logos
 import VueLogo from "../assets/logo.png";
@@ -99,6 +98,8 @@ import GitLogo from "../assets/Modified-images/git-logo-mod.png";
 import NodeJSLogo from "../assets/Modified-images/node-js-logo-mod.png";
 import ChatGPT from "../assets/Modified-images/chat-gpt-logo-mod.png";
 import Bootstrap from "../assets/Modified-images/bootstrap-logo-mod.png";
+import Footer from "@/components/Footer.vue";
+import globalState from "@/globals/state";
 
 type ImgType = {
   src: string;
@@ -220,11 +221,19 @@ a:hover img {
   transform: scale(1.1); /* Increases size by 10% */
 }
 
-a.custom-class {
+div.dark a.custom-class {
   text-shadow: 1px 1px 10px var(--vue-green);
+}
+div.light a.custom-class {
+  text-shadow: 1px 1px 10px #9fdcad;
+}
+a.custom-class {
   display: inline-block;
 }
 a.custom-class:hover {
   transform: scale(1.1); /* Increases size by 10% */
+}
+img.link-img:hover {
+  filter: drop-shadow(1px 1px 3px var(--vue-green));
 }
 </style>

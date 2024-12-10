@@ -1,5 +1,9 @@
 <script setup lang="ts">
 const { className } = defineProps({ className: { type: String, default: "" } });
+type LinkType = {
+  name: string;
+};
+const links: LinkType[] = [{ name: "home" }, { name: "about" }, { name: "contact" }];
 </script>
 
 <template>
@@ -7,31 +11,17 @@ const { className } = defineProps({ className: { type: String, default: "" } });
     class="navbar-nav ms-auto"
     :class="className"
   >
-    <li class="nav-item">
+    <li
+      class="nav-item"
+      v-for="link in links"
+    >
       <RouterLink
         role="link"
-        class="nav-link"
-        :to="{ name: 'home' }"
+        class="nav-link text-capitalize"
+        :to="{ name: link.name }"
         active-class="activeLink"
-        >Home</RouterLink
-      >
-    </li>
-    <li class="nav-item">
-      <RouterLink
-        role="link"
-        class="nav-link"
-        :to="{ name: 'about' }"
-        active-class="activeLink"
-        >About</RouterLink
-      >
-    </li>
-    <li class="nav-item">
-      <RouterLink
-        role="link"
-        class="nav-link"
-        :to="{ name: 'contact' }"
-        active-class="activeLink"
-        >Contact</RouterLink
+        :key="link.name"
+        >{{ link.name }}</RouterLink
       >
     </li>
   </ul>
@@ -45,6 +35,15 @@ button:hover {
 .activeLink {
   font-weight: bold;
   font-size: 0.95rem;
+}
+@media (max-width: 575px) {
+  li:has(a.activeLink):hover a.activeLink {
+    border-color: var(--vue-green);
+    /* border-bottom: 1px solid var(--vue-green); */
+  }
+  .activeLink {
+    border-bottom: 1px solid gray;
+  }
 }
 @media (min-width: 576px) {
   .activeLink {
