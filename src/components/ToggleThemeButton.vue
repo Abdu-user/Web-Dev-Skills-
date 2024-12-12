@@ -10,13 +10,17 @@
   >
     <transition-group name="fade">
       <i
+        role="img"
         v-if="theme === 'dark'"
         class="icon bi bi-moon fs-4"
+        aria-label="The moon icon"
       ></i>
 
       <i
+        role="img"
         v-else
         class="icon bi bi-sun fs-4"
+        aria-label="The sun icon"
       ></i>
     </transition-group>
   </div>
@@ -59,18 +63,18 @@
 </style>
 
 <script setup lang="ts">
-import { ThemeType } from "@/App.vue";
-import { BusType } from "@/globals/bus";
-import { inject, ref } from "vue";
+// import { BusType } from "@/globals/bus";
+// import { inject, ref } from "vue";
 import { keyboardCheck } from "@/utils/utils";
+// import { ThemeType } from "@/globals/state";
+import { ThemeType, useGlobalStore } from "@/stores/GlobalStore";
 const props = defineProps({
   theme: String as () => ThemeType,
   className: { type: String, default: "" },
 });
-// const emit = defineEmits(["toggleTheme"]);
-const bus = inject("$bus") as BusType;
-
+// const bus = inject("$bus") as BusType;
+const globalStore = useGlobalStore();
 const toggleTheme = () => {
-  bus.$emit("toggleTheme");
+  globalStore.toggleTheme();
 };
 </script>

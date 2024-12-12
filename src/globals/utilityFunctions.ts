@@ -1,5 +1,7 @@
-import globalState from "./state";
+import { useGlobalStore } from "@/stores/GlobalStore";
 
-export const updateIsMobile = () => {
-  globalState.isMobile = window.innerWidth <= 768;
+// import globalState from "./state";
+const globalStore = useGlobalStore();
+const updateIsMobile = () => {
+  globalStore.isMobile = window.innerWidth <= 768;
 };

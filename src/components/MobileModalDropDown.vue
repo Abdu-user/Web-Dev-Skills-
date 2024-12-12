@@ -1,5 +1,5 @@
 <template>
-  <div class="position-relative">
+  <div>
     <button
       class="navbar-toggler"
       type="button"
@@ -12,17 +12,24 @@
         <span class="navbar-toggler-icon"></span>
       </slot>
     </button>
-    <Transition name="drop-down">
-      <!-- :class="{ show: !isNavbarCollapsed }" -->
-      <!-- class="collapse navbar-collapse" -->
+    <Transition :duration="200">
       <div
-        role="region"
-        id="navbarContent"
         v-show="isNavbarCollapsed"
-        class="position-absolute"
-        :class="props.childClass"
+        :class="parentClass"
+        @click.self="toggleNavbar"
       >
-        <slot></slot>
+        <Transition name="drop-down">
+          <!-- :class="{ show: !isNavbarCollapsed }" -->
+          <!-- class="collapse navbar-collapse" -->
+          <div
+            role="region"
+            id="navbarContent"
+            v-show="isNavbarCollapsed"
+            :class="props.childClass"
+          >
+            <slot></slot>
+          </div>
+        </Transition>
       </div>
     </Transition>
   </div>
@@ -31,9 +38,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const props = defineProps({
-  childClass: { type: String },
-});
+const props = defineProps<{
+  childClass: string;
+  parentClass?: string;
+}>();
 const isNavbarCollapsed = ref(false);
 
 const toggleNavbar = () => {

@@ -23,14 +23,15 @@
 
     <!-- NavLinks -->
     <NavbarLinks
-      v-if="!globalState.isMobile"
+      v-if="!globalStore.isMobile"
       className="d-flex flex-row gap-2"
     />
 
     <!-- v-if="isPhoneSize" -->
     <MobileModalDropDown
-      v-if="globalState.isMobile"
-      :childClass="`bg-${theme} px-3 pb-3 pt-1 left-3 start-negative ${mobileComputed}`"
+      v-if="globalStore.isMobile"
+      :childClass="`bg-${theme} px-3 pb-3 pt-1  position-absolute childClass ${mobileComputed}`"
+      :parentClass="`parentClass position-absolute`"
     >
       <NavbarLinks />
     </MobileModalDropDown>
@@ -43,11 +44,13 @@ import logo from "../../assets/logo.png";
 import ToggleThemeButton from "../ToggleThemeButton.vue";
 import NavbarLinks from "./NavbarLinks.vue";
 import MobileModalDropDown from "../MobileModalDropDown.vue";
-import globalState, { ThemeType } from "@/globals/state";
+import { ThemeType, useGlobalStore } from "@/stores/GlobalStore";
+// import globalState, { ThemeType } from "@/globals/state";
 
 const props = defineProps<{
   theme: ThemeType;
 }>();
+const globalStore = useGlobalStore();
 
 const containerClass = computed(() => {
   return `navbar-${props.theme} bg-${props.theme}`;
@@ -58,10 +61,16 @@ const mobileComputed = computed(() => {
 </script>
 <style scoped>
 /* //Mobile styles */
-::v-deep(.start-negative) {
+::v-deep(.childClass) {
   border-radius: 0.75rem;
-  left: -30px;
-  margin-top: 20px;
+  max-width: 200px;
+  right: 0;
+}
+::v-deep(.parentClass) {
+  left: 0;
+  top: 82px;
+  width: 100vw;
+  height: calc(100vh - 82px);
 }
 ::v-deep(.light-theme-shadow) {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.6);

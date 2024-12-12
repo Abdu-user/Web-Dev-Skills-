@@ -4,41 +4,31 @@
     id="window"
     :class="containerClass"
   >
-    <NavBar
-      :theme="globalState.theme"
-      :toggleTheme="toggleTheme"
-    />
+    <NavBar :theme="globalStore.theme" />
+
     <RouterView />
-    <!-- <div class="content">
-    </div> -->
+    <div id="innerModals"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, inject, onMounted, onUnmounted, reactive } from "vue";
+import { computed, onMounted, onUnmounted } from "vue";
 import NavBar from "./components/navbar//Navbar.vue";
-import { BusType } from "./globals/bus";
-import globalState, { GlobalStateType } from "./globals/state";
-import onMountedCalls from "./globals/onMountedCalls";
-import { updateIsMobile } from "./globals/utilityFunctions";
+import { useGlobalStore } from "./stores/GlobalStore";
 
-onMounted(onMountedCalls);
-onUnmounted(() => window.removeEventListener("resize", updateIsMobile));
+const globalStore = useGlobalStore();
 
-const saveState = () => {
-  localStorage.setItem("state", JSON.stringify(globalState));
-};
-
-const toggleTheme = () => {
-  globalState.theme = globalState.theme === "dark" ? "light" : "dark";
-  saveState();
-};
-
-const bus = inject("$bus") as BusType;
-bus.$on("toggleTheme", toggleTheme);
+onMounted(() => {
+  globalStore.getState();
+  globalStore.updateIsMobile();
+  window.addEventListener("resize", globalStore.updateIsMobile);
+});
+onUnmounted(() => {
+  window.removeEventListener("resize", globalStore.updateIsMobile);
+});
 
 const containerClass = computed(() => {
-  return `bg-${globalState.theme} text-${globalState.theme === "dark" ? "light" : "black"}`;
+  return `bg-${globalStore.theme} text-${globalStore.theme === "dark" ? "light" : "black"}`;
 });
 </script>
 

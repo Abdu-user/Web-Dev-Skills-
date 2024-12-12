@@ -18,6 +18,6 @@ const getGlobalState = () => {
   return globalState;
 };
 
-export default globalState;
-export { setGlobalStateProperty, getGlobalState };
-export { ThemeType, GlobalStateType };
+// export default globalState;
+// export { setGlobalStateProperty, getGlobalState };
+// export { ThemeType, GlobalStateType };

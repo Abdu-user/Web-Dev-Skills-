@@ -18,5 +18,5 @@ const bus = {
     }
   },
 };
-export type BusType = typeof bus;
-export default bus;
+// export type BusType = typeof bus;
+// export default bus;

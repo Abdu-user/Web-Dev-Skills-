@@ -1,14 +1,17 @@
-import globalState, { GlobalStateType } from "./state";
-import { updateIsMobile } from "./utilityFunctions";
+// import globalState, { GlobalStateType } from "./state";
+import { GlobalStateType, useGlobalStore } from "@/stores/GlobalStore";
+// import { updateIsMobile } from  "./utilityFunctions";
 
+const globalStore = useGlobalStore();
 const getState = () => {
   const savedState = localStorage.getItem("state");
   if (savedState) {
     const parsedState: GlobalStateType = JSON.parse(savedState);
-    globalState.theme = parsedState.theme;
+    globalStore.theme = parsedState.theme;
   }
 };
-export default function onMountedCalls() {
-  getState();
-  window.addEventListener("resize", updateIsMobile);
-}
+// export default function onMountedCalls() {
+//   getState();
+//   updateIsMobile();
+//   window.addEventListener("resize", updateIsMobile);
+// }

@@ -1,8 +1,14 @@
 import { render, screen } from "@testing-library/vue";
 import "@testing-library/jest-dom";
 import ToggleThemeButton from "@/components/ToggleThemeButton.vue";
+import { createPinia, defineStore, setActivePinia } from "pinia";
+import userEvent from "@testing-library/user-event";
 
 describe("ToggleThemeButton.vue", () => {
+  beforeEach(() => {
+    const pinia = createPinia();
+    setActivePinia(pinia);
+  });
   it("renders the dark theme button when the theme is dark", async () => {
     const { container } = render(ToggleThemeButton, {
       props: { theme: "dark" },

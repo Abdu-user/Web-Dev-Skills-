@@ -7,9 +7,11 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "./customBootstrap.css";
 
 import "./main.css";
-import bus from "./globals/bus";
+import { createPinia } from "pinia";
 
+// import bus from "./globals/bus";
+// app.provide("$bus", bus);
 const app = createApp(App);
 app.use(router);
-app.provide("$bus", bus);
+app.use(createPinia());
 app.mount("#app");
