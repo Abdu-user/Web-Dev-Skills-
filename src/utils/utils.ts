@@ -5,7 +5,9 @@ export function keyboardCheck(e: KeyboardEvent, cb: (...arg: any) => void, keys:
     delete keys["Space"];
   }
   Object.keys(keys).forEach((key) => {
+    console.log(e);
     if (e.key === key) {
+      e.preventDefault();
       cb();
     }
   });

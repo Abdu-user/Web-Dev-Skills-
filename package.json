@@ -20,9 +20,13 @@
     "vue-router": "^4.0.3"
   },
   "devDependencies": {
+    "@cypress/vue": "^6.0.1",
+    "@testing-library/cypress": "^10.0.2",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/user-event": "^14.5.2",
+    "@types/cypress": "^0.1.6",
     "@types/jest": "^27.0.1",
+    "@types/sinon": "^17.0.3",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-e2e-cypress": "~5.0.0",
     "@vue/cli-plugin-pwa": "~5.0.0",
@@ -33,7 +37,7 @@
     "@vue/test-utils": "^2.0.0-0",
     "@vue/vue3-jest": "^27.0.0-alpha.1",
     "babel-jest": "^27.0.6",
-    "cypress": "^9.7.0",
+    "cypress": "^13.16.1",
     "jest": "^27.0.5",
     "jest-mock-extended": "^4.0.0-beta1",
     "ts-jest": "^27.0.4",

@@ -5,9 +5,12 @@
     class="custom-hover position-relative fixed-width"
     :class="className"
     @click="toggleTheme"
-    @keyup="keyboardCheck($event, toggleTheme, { Space: true })"
     aria-label="Toggle to Light/Dark Theme"
+    v-on:keydown.space.enter.prevent=""
+    @keyup.space.enter="toggleTheme"
   >
+    <!-- @keydown="keyboardCheck($event, toggleTheme, { Space: true })" -->
+    <!-- @keydown.space.prevent="toggleTheme" -->
     <transition-group name="fade">
       <i
         role="img"

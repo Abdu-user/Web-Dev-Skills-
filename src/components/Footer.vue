@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <footer class="text-center pb-4 mt-5">
+  <footer class="text-center pb-4 mt-5 mt-auto">
     <div class="container">
       <p class="mb-2">&copy; 2024 Abdurrakhman. All rights reserved.</p>
       <ul class="list-inline">

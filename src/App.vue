@@ -1,6 +1,6 @@
 <template>
   <div
-    class="overflow-auto w-100 vh-100"
+    class="overflow-auto w-100 vh-100 d-flex flex-column"
     id="window"
     :class="containerClass"
   >

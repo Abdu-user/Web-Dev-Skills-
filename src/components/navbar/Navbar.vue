@@ -64,7 +64,8 @@ const mobileComputed = computed(() => {
 ::v-deep(.childClass) {
   border-radius: 0.75rem;
   max-width: 200px;
-  right: 0;
+  right: 7px;
+  text-align: center;
 }
 ::v-deep(.parentClass) {
   left: 0;
