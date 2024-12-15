@@ -8,10 +8,12 @@ import "./customBootstrap.css";
 
 import "./main.css";
 import { createPinia } from "pinia";
+import { autoAnimatePlugin } from "@formkit/auto-animate/vue";
 
 // import bus from "./globals/bus";
 // app.provide("$bus", bus);
 const app = createApp(App);
 app.use(router);
 app.use(createPinia());
+app.use(autoAnimatePlugin);
 app.mount("#app");

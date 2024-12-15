@@ -16,7 +16,7 @@
         </li>
         <li class="list-inline-item mx-2">
           <a
-            href="https://github.com"
+            href="https://github.com/Abdu-user"
             target="_blank"
             class="text-decoration-none"
           >
@@ -25,11 +25,11 @@
         </li>
         <li class="list-inline-item mx-2">
           <a
-            href="https://www.linkedin.com"
+            href="https://github.com/Abdu-user/Web-Dev-Skills-"
             target="_blank"
             class="text-decoration-none"
           >
-            LinkedIn
+            GitHub-Repo
           </a>
         </li>
       </ul>

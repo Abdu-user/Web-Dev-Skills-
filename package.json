@@ -9,6 +9,7 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^0.8.2",
     "@testing-library/vue": "^8.1.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",

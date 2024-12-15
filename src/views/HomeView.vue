@@ -1,5 +1,8 @@
 <template>
-  <div class="home"></div>
+  <div
+    class="home"
+    :key="'home'"
+  ></div>
 
   <Footer />
 </template>

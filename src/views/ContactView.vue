@@ -2,6 +2,7 @@
   <div
     :class="globalStore.theme"
     class="py-5"
+    key="contact"
   >
     <div class="container">
       <h1 class="text-center mb-4">Contact Us</h1>

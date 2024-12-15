@@ -2,7 +2,10 @@
   <div class="col-md-6">
     <h3>Send Us a Message</h3>
     <form @submit.prevent="submitForm">
-      <div class="mb-3">
+      <div
+        class="mb-3"
+        v-auto-animate
+      >
         <label
           for="name"
           class="form-label"
@@ -23,7 +26,10 @@
           {{ errors.name }}
         </div>
       </div>
-      <div class="mb-3">
+      <div
+        class="mb-3"
+        v-auto-animate
+      >
         <label
           for="email"
           class="form-label"
@@ -44,7 +50,10 @@
           {{ errors.email }}
         </div>
       </div>
-      <div class="mb-3">
+      <div
+        class="mb-3"
+        v-auto-animate
+      >
         <label
           for="message"
           class="form-label"
@@ -115,8 +124,8 @@ const validateForm = () => {
     errors.value.email = "Email is required.";
   }
   // else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.value.email)) {
-  //   errors.value.email = "Invalid email address.";
-  // }
+  //   errors.value.email = "Invalid email address.";}
+
   if (!formData.value.message) {
     errors.value.message = "Message is required.";
   }
