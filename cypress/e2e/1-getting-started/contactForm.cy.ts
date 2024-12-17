@@ -41,8 +41,7 @@ describe("Contact Form", () => {
 
     // Intercept the alert and ensure the form submits
     cy.window().then((win) => {
-      // @ts-ignore
-      cy.stub(win, "alert").as("alert");
+      // cy.stub(win, "alert").as("alert");
     });
 
     // Submit the form

@@ -13,7 +13,8 @@
     "useDefineForClassFields": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["webpack-env", "jest", "cypress", "cypress/vue", "node", "sinon", "@testing-library/cypress"],
+    "types": ["webpack-env", "node", "sinon"],
+    // "types": ["webpack-env", "jest", "cypress", "cypress/vue", "node", "sinon", "@testing-library/cypress"],
     "paths": {
       "@/*": ["src/*"]
     },
