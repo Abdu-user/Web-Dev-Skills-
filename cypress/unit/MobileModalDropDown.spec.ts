@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/vue";
-import MobileModalDropDown from "@/components/MobileModalDropDown.vue";
+import MobileModalDropDown from "../../src//components/MobileModalDropDown.vue";
 import "@testing-library/jest-dom";
 
 describe("MobileModalDropDown.vue", () => {

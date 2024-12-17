@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/vue";
-import NavbarLinks from "@/components/navbar/NavbarLinks.vue";
+import NavbarLinks from "../../src//components/navbar/NavbarLinks.vue";
 import { createRouter, createWebHistory, RouteRecordRaw, RouterLink } from "vue-router";
 import "@testing-library/jest-dom";
 // import { fireEvent } from "@testing-library/vue";

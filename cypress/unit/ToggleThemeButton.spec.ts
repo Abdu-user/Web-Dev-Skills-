@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/vue";
 import "@testing-library/jest-dom";
-import ToggleThemeButton from "@/components/ToggleThemeButton.vue";
+import ToggleThemeButton from "../../src/components/ToggleThemeButton.vue";
 import { createPinia, defineStore, setActivePinia } from "pinia";
 import userEvent from "@testing-library/user-event";
 
