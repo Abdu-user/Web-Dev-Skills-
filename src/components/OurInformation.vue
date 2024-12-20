@@ -14,7 +14,7 @@
       aria-labelledby="follow-us"
     >
       <h5 id="follow-us">Follow Us</h5>
-      <div>
+      <div class="d-flex flex-wrap gap-2">
         <a
           href="https://www.facebook.com/abdu248616"
           class="btn btn-outline-primary btn-sm me-2"
