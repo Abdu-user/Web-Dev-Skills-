@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <footer class="text-center pb-4 mt-5 mt-auto">
+  <footer class="text-center py-4 mt-5 mt-auto custome-bg-color">
     <div class="container">
       <p class="mb-2">&copy; 2024 Abdurrakhman. All rights reserved.</p>
       <ul class="list-inline">
@@ -50,3 +50,9 @@
     </div>
   </footer>
 </template>
+
+<style scoped>
+.custome-bg-color {
+  background-color: rgba(128, 128, 128, 0.044);
+}
+</style>

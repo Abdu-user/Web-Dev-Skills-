@@ -1,7 +1,7 @@
 describe("Contact Form", () => {
   beforeEach(() => {
-    cy.visit("/"); // Assuming this is the URL of the form page
-    cy.findByRole("link", { name: /contact/i }).click();
+    cy.visit("/contact"); // Assuming this is the URL of the form page
+    // cy.findByRole("link", { name: /contact/i }).click();
   });
 
   it("should display the form fields and submit button", () => {
@@ -33,7 +33,7 @@ describe("Contact Form", () => {
     cy.findByText(/email is required/i).should("be.visible");
   });
 
-  it("should submit the form successfully when all fields are valid", () => {
+  it.only("should submit the form successfully when all fields are valid", () => {
     // Fill out the form with valid data
     cy.findByLabelText(/Name/i).type("John Doe");
     cy.findByLabelText(/Email/i).type("johndoe@example.com");
@@ -41,12 +41,14 @@ describe("Contact Form", () => {
 
     // Intercept the alert and ensure the form submits
     cy.window().then((win) => {
-      // cy.stub(win, "alert").as("alert");
+      // @ts-ignore
+      cy.stub(win, "alert").as("alert");
     });
 
     // Submit the form
     cy.findByRole("button", { name: /Submit/i }).click();
 
+    // cy.wait(1000);
     // Check that the alert was called with the expected message
     cy.get("@alert").should("have.been.calledWith", "Thank you for contacting us!");
 

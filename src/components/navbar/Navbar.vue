@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg shadow-lg p-3 z-1 col-12 position-sticky opacity-100 px-md-4"
+    class="navbar navbar-expand-lg shadow-lg p-3 z-1 col-12 position-sticky opacity-100 px-md-4 w-100"
     :class="containerClass"
   >
     <a
@@ -83,6 +83,8 @@ const mobileComputed = computed(() => {
 
 nav {
   top: -1px !important;
+  /* top: 0; */
+  left: 0 !important;
 }
 
 @media (max-width: 576px) {

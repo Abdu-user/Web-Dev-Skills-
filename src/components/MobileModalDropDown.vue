@@ -19,8 +19,6 @@
         @click.self="toggleNavbar"
       >
         <Transition name="drop-down">
-          <!-- :class="{ show: !isNavbarCollapsed }" -->
-          <!-- class="collapse navbar-collapse" -->
           <div
             role="region"
             id="navbarContent"

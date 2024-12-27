@@ -1,15 +1,26 @@
 <script setup lang="ts">
+import { useProductsStore } from "@/stores/ProductsStore";
+
 const { className } = defineProps({ className: { type: String, default: "" } });
 type LinkType = {
   name: string;
 };
-const links: LinkType[] = [{ name: "home" }, { name: "about" }, { name: "contact" }];
+const links: LinkType[] = [{ name: "home" }, { name: "products" }, { name: "about" }, { name: "contact" }];
+
+const productsStore = useProductsStore();
+const fetchRequiredData = () => {
+  if (productsStore.didFetchOnce) return;
+
+  productsStore.fetchProducts();
+  productsStore.didFetchOnce = true;
+};
 </script>
 
 <template>
   <ul
     class="navbar-nav ms-auto"
     :class="className"
+    @mouseenter="fetchRequiredData"
   >
     <li
       class="nav-item"
@@ -21,6 +32,7 @@ const links: LinkType[] = [{ name: "home" }, { name: "about" }, { name: "contact
         :to="{ name: link.name }"
         active-class="activeLink"
         :key="link.name"
+        @mouseenter="link.name === 'products' ? fetchRequiredData : null"
         >{{ link.name }}</RouterLink
       >
     </li>
