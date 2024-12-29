@@ -68,7 +68,7 @@
 <script setup lang="ts">
 // import { BusType } from "@/globals/bus";
 // import { inject, ref } from "vue";
-import { keyboardCheck } from "@/utils/utils";
+// import { keyboardCheck } from "@/utils/utils";
 // import { ThemeType } from "@/globals/state";
 import { ThemeType, useGlobalStore } from "@/stores/GlobalStore";
 const props = defineProps({

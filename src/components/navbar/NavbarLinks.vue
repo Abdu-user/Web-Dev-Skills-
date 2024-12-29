@@ -5,7 +5,7 @@ const { className } = defineProps({ className: { type: String, default: "" } });
 type LinkType = {
   name: string;
 };
-const links: LinkType[] = [{ name: "home" }, { name: "products" }, { name: "about" }, { name: "contact" }];
+const links: LinkType[] = [{ name: "home" }, { name: "products" }, { name: "todo" }, { name: "about" }, { name: "contact" }];
 
 const productsStore = useProductsStore();
 const fetchRequiredData = () => {

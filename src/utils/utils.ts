@@ -1,14 +1,17 @@
-export function keyboardCheck(e: KeyboardEvent, cb: (...arg: any) => void, keys: { [key: string]: boolean } = { Enter: true }) {
-  keys = { Enter: true, ...keys };
-  if (keys["Space"] === true) {
-    keys[" "] = true;
-    delete keys["Space"];
-  }
-  Object.keys(keys).forEach((key) => {
-    console.log(e);
-    if (e.key === key) {
-      e.preventDefault();
-      cb();
-    }
+export function formatDateForDisplay(date: string): string {
+  const parsedDate = new Date(date);
+  const currentYear = new Date().getFullYear();
+  const dateYear = parsedDate.getFullYear();
+
+  const yearPart = currentYear === dateYear ? "" : `${dateYear} `;
+  const monthDayPart = parsedDate.toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
   });
+
+  return `${yearPart}${monthDayPart}`;
+}
+export function addZeroString(number: number): string {
+  if (number < 10) return `0${number}`;
+  return String(number);
 }

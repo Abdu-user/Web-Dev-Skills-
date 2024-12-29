@@ -27,7 +27,3 @@ import SendMessage from "@/components/SendMessageForm.vue";
 // Access the global store
 const globalStore = useGlobalStore();
 </script>
-
-<style scoped>
-/* Add any additional styling if needed */
-</style>

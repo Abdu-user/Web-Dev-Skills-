@@ -1,6 +1,6 @@
 <template>
   <div
-    class="overflow-auto w-100 vh-100 d-flex flex-column"
+    class="overflow-auto w-100 vh-100 d-flex flex-column mt-1"
     id="window"
     :class="containerClass"
     v-auto-animate="{ duration: 200 }"
@@ -23,6 +23,7 @@ onMounted(() => {
   globalStore.getState();
   globalStore.updateIsMobile();
   window.addEventListener("resize", globalStore.updateIsMobile);
+  console.log(document.getElementById("window")?.innerHTML);
 });
 onUnmounted(() => {
   window.removeEventListener("resize", globalStore.updateIsMobile);
@@ -32,9 +33,3 @@ const containerClass = computed(() => {
   return `bg-${globalStore.theme} text-${globalStore.theme === "dark" ? "light" : "black"}`;
 });
 </script>
-
-<style scoped>
-div {
-  margin-top: 5px;
-}
-</style>

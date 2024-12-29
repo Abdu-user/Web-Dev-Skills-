@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg shadow-lg p-3 z-1 col-12 position-sticky opacity-100 px-md-4 w-100"
+    class="navbar navbar-expand-lg shadow-lg p-3 z-10 col-12 sticky opacity-100 px-md-4 w-100"
     :class="containerClass"
   >
     <a
@@ -30,8 +30,9 @@
     <!-- v-if="isPhoneSize" -->
     <MobileModalDropDown
       v-if="globalStore.isMobile"
-      :childClass="`bg-${theme} px-3 pb-3 pt-1  position-absolute childClass ${mobileComputed}`"
-      :parentClass="`parentClass position-absolute`"
+      :childClass="`bg-${theme} px-3 pb-3 pt-1   position-absolute childClass ${mobileComputed}`"
+      :parentClass="`parentClass position-absolute z-10  bg-black bg-opacity-50`"
+      class=" "
     >
       <NavbarLinks />
     </MobileModalDropDown>

@@ -3,7 +3,7 @@
     <!-- <StickyNav /> -->
     <header class="text-center pt-4">
       <!-- :class="" -->
-      <h1 class="h2">About Abdurrakhman</h1>
+      <h1 class="h1">About Abdurrakhman</h1>
     </header>
     <main class="container my-5">
       <section class="row align-items-center justify-content-evenly">
@@ -31,7 +31,7 @@
 
       <hr />
 
-      <h1 class="text-center">Technologies I use/used-to to create a Web page</h1>
+      <h2 class="h4 text-center mt-4">Technologies I use/used-to to create a Web page</h2>
       <section class="row align-items-center mt-5">
         <!-- Images section -->
         <div class="col-12 col-md-4 text-center mb-4 mb-md-0 d-flex flex-wrap gap-3 table-hover">

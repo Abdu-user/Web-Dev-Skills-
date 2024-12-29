@@ -5,7 +5,11 @@ module.exports = {
     "./public/index.html", // Include this if you're using an HTML file
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "vue-color": "#28a745",
+      },
+    },
   },
   plugins: [],
 };
