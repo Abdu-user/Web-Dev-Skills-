@@ -19,7 +19,7 @@
           aria-describedby="todo-help-text"
           placeholder="Add a new task"
           type="text"
-          @input="handleInput"
+          @blur="handleInput"
           ref="addNewTodoInputRef"
         />
         <small
@@ -187,11 +187,11 @@ const isInputEmpty = computed(() => toDoText.value.trim() === "");
 
 const addNewTodoInputRef = ref<HTMLInputElement | null>(null);
 const handleInput = () => {
-  nextTick(() => {
+  setTimeout(() => {
     if (addNewTodoInputRef.value) {
       addNewTodoInputRef.value.focus();
     }
-  });
+  }, 100);
 };
 // const isInputEmpty = computed(() => toDoText.value.trim() === "");
 

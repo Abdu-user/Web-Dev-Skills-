@@ -16,6 +16,23 @@ describe("ToDo View Page", () => {
 
     cy.findByRole("button", { name: /add/i }).click();
   };
+  it("expect to have a div with today's date inside ul", () => {
+    const today = new Date();
+    const options = { month: "short", day: "numeric" };
+    // @ts-ignore
+    const formattedDate = today.toLocaleDateString("en-US", options).toLowerCase();
+
+    // Add a new task to ensure the date is displayed
+    addNewTask("Sample Task");
+    cy.wait(2);
+
+    cy.findByRole("list", { name: /To-do list items/i }).within(() => {
+      cy.findByRole("heading", { name: new RegExp(formattedDate, "i") })
+        .contains(new RegExp(formattedDate, "i"))
+        .should("exist")
+        .should("be.visible");
+    });
+  });
 
   it("add a new task by typing", () => {
     // addNewTask("Sold Antonio Bnaderas 3g");
@@ -384,22 +401,5 @@ describe("ToDo View Page", () => {
 
     // Verify the original task is no longer in the list
     cy.findByRole("listitem", { name: tasks[0] }).should("not.exist");
-  });
-  it("expect to have a div with today's date inside ul", () => {
-    const today = new Date();
-    const options = { month: "short", day: "numeric" };
-    // @ts-ignore
-    const formattedDate = today.toLocaleDateString("en-US", options).toLowerCase();
-
-    // Add a new task to ensure the date is displayed
-    addNewTask("Sample Task");
-    cy.wait(2);
-
-    cy.findByRole("list", { name: /To-do list items/i }).within(() => {
-      cy.findByRole("heading", { name: new RegExp(formattedDate, "i") })
-        .contains(new RegExp(formattedDate, "i"))
-        .should("exist")
-        .should("be.visible");
-    });
   });
 });
