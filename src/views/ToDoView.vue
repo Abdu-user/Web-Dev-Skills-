@@ -19,6 +19,8 @@
           aria-describedby="todo-help-text"
           placeholder="Add a new task"
           type="text"
+          @input="handleInput"
+          ref="addNewTodoInputRef"
         />
         <small
           id="todo-help-text"
@@ -180,7 +182,18 @@ const addTodo = () => {
   toDoStore.addTodo(toDoText.value.trim());
   toDoText.value = "";
 };
+
 const isInputEmpty = computed(() => toDoText.value.trim() === "");
+
+const addNewTodoInputRef = ref<HTMLInputElement | null>(null);
+const handleInput = () => {
+  nextTick(() => {
+    if (addNewTodoInputRef.value) {
+      addNewTodoInputRef.value.focus();
+    }
+  });
+};
+// const isInputEmpty = computed(() => toDoText.value.trim() === "");
 
 const openOptions = (id: number) => {
   if (openedOptions.value === id) {
