@@ -203,7 +203,7 @@ describe("ToDo View Page", () => {
       .clear()
       .type(editedTask)
       .should("have.value", editedTask)
-      .type("{ctrl}{enter}");
+      .type("{enter}");
     cy.findByRole("textbox", { name: new RegExp(originalTask, "i") }).should("not.exist");
 
     // Verify the edited task appears in the list
@@ -315,7 +315,7 @@ describe("ToDo View Page", () => {
 
     cy.findByRole("listitem", { name: new RegExp(tasks[3], "i") })
       .findByRole("textbox")
-      .type(" not exist 3{ctrl}{enter}");
+      .type(" not exist 3{enter}");
     cy.findByRole("listitem", { name: new RegExp(tasks[3], "i") })
       .findByRole("textbox")
       .should("not.exist");

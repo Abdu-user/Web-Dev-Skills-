@@ -79,7 +79,7 @@
             v-model="editingTextArea"
             class="w-full sm:px-4 px-3 py-2 rounded bg-inherit text-inherit custome-shadow"
             ref="editingTextAreaRef"
-            @keydown.ctrl.enter="saveTheUpdatedToDoText"
+            @keydown.enter="saveTheUpdatedToDoText"
             :aria-label="editingTextArea"
           ></textarea>
 
