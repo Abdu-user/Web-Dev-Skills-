@@ -24,6 +24,7 @@
             type="text"
             @focus="isInputFocused = true"
             @blur="handleBlur"
+            ref="todoInputRef"
           />
           <ul
             :class="bgColor"
@@ -203,6 +204,7 @@ const computedDataList = computed(() => {
   });
 });
 const isInputFocused = ref(false);
+const todoInputRef = ref<HTMLInputElement | null>(null);
 const setTimeoutId = ref<ReturnType<typeof setTimeout> | null>(null);
 const handleBlur = () => {
   setTimeoutId.value = setTimeout(() => {
@@ -218,6 +220,9 @@ const handleOptionsFocus = () => {
 const putIntoTodoText = (text: (typeof dataList.value)[number]) => {
   toDoText.value = text;
   isInputFocused.value = false;
+  if (todoInputRef.value) {
+    todoInputRef.value.focus();
+  }
 };
 
 const isInputEmpty = computed(() => toDoText.value.trim() === "");
