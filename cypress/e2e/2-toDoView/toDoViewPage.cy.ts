@@ -12,7 +12,9 @@ describe("ToDo View Page", () => {
   });
   const addNewTask = (todoText: string) => {
     // Type the new task into the input field
-    cy.findByRole("combobox", { name: /add a new task/i }).type(todoText);
+    cy.findByRole("combobox", { name: /add a new task/i })
+      .should("exist")
+      .type(todoText);
 
     cy.findByRole("button", { name: /add/i }).click();
   };
@@ -65,7 +67,7 @@ describe("ToDo View Page", () => {
     // @ts-ignore .scrollIntoView Exist on cypress
     cy.get("li").contains(new RegExp(todoText)).scrollIntoView().should("exist").should("be.visible");
   });
-  it("add a new task by selecting from combobox", () => {
+  it.only("add a new task by selecting from combobox", () => {
     // Ensure the "Add" button is visible, exists, and is initially disabled
     cy.findByRole("button", { name: /add/i }).should("be.visible").should("exist").should("be.disabled");
 

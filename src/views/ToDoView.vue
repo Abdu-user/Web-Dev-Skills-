@@ -11,28 +11,38 @@
 
       <!-- Create a ToDo -->
       <div class="p-3 flex justify-center items-center gap-3 w-full max-w-3xl shadow-md rounded-2xl">
-        <input
-          list="todo-suggestions"
-          class="w-full sm:px-4 px-3 py-2 rounded bg-inherit text-inherit"
-          v-model="toDoText"
-          aria-label="Add a new task"
-          aria-describedby="todo-help-text"
-          placeholder="Add a new task"
-          type="text"
-          @blur="handleInput"
-          ref="addNewTodoInputRef"
-        />
-        <small
-          id="todo-help-text"
-          class="sr-only"
-          >Enter a new to-do task here.</small
+        <div
+          v-auto-animate="{ duration: 150 }"
+          class="w-full"
         >
-        <datalist id="todo-suggestions">
-          <option value="Buy groceries"></option>
-          <option value="Complete homework"></option>
-          <option value="Walk the dog"></option>
-          <option value="Call mom"></option>
-        </datalist>
+          <input
+            role="combobox"
+            class="w-full sm:px-4 px-3 py-2 rounded bg-inherit text-inherit"
+            v-model="toDoText"
+            aria-label="Add a new task"
+            placeholder="Add a new task"
+            type="text"
+            @focus="isInputFocused = true"
+            @blur="handleBlur"
+          />
+          <ul
+            :class="bgColor"
+            class="absolute top-14"
+            v-if="isInputFocused"
+          >
+            <li
+              v-for="option in computedDataList"
+              role="option"
+              tabindex="0"
+              @focus="handleOptionsFocus"
+              @keydown="putIntoTodoText(option)"
+              @click="putIntoTodoText(option)"
+            >
+              {{ option }}
+            </li>
+          </ul>
+        </div>
+
         <button
           @click="addTodo"
           class="bg-green-600 sm:px-4 px-3 py-2 rounded text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:text-gray-800 transition-all"
@@ -98,15 +108,15 @@
           <!-- To Do Buttons -->
           <div
             class="ms-auto text-2xl relative text-white"
-            :class="openedOptions === todo.id ? 'z-1' : 'z-0'"
+            :class="openedOptionsId === todo.id ? 'z-1' : 'z-0'"
             v-auto-animate="{ duration: 300 }"
           >
             <button
               @click="openOptions(todo.id)"
               class="cursor-pointer px-3 py-1 bg-green-600 rounded-full transition-all duration-700"
-              :aria-expanded="openedOptions === todo.id"
+              :aria-expanded="openedOptionsId === todo.id"
               aria-label="Open options menu for this to-do"
-              :class="openedOptions === todo.id && openedOptionsButtonStyle"
+              :class="openedOptionsId === todo.id && openedOptionsButtonStyle"
               title="Open options menu for this to-do"
             >
               ⋮
@@ -123,7 +133,7 @@
 
             <div
               class="absolute flex flex-col right-0 text-base bg-green-800 p-3 rounded-3xl rounded-tr-none gap-3"
-              v-if="openedOptions === todo.id"
+              v-if="openedOptionsId === todo.id"
             >
               <!-- if editing buttons -->
               <template v-if="todo.id === editingTodoId">
@@ -171,11 +181,13 @@ import { useToDoStore } from "@/stores/ToDoStore";
 import { addZeroString, formatDateForDisplay } from "@/utils/utils";
 import { computed, nextTick, ref, watch } from "vue";
 
+// State variables
 const toDoText = ref("");
 const toDoStore = useToDoStore();
 toDoStore.getTodosFromStorage();
-const openedOptions = ref<number | null>(1735367445891);
+const openedOptionsId = ref<number | null>(1735367445891);
 
+// Add a new todo
 const addTodo = () => {
   if (isInputEmpty.value) return;
 
@@ -183,33 +195,57 @@ const addTodo = () => {
   toDoText.value = "";
 };
 
-const isInputEmpty = computed(() => toDoText.value.trim() === "");
-
-const addNewTodoInputRef = ref<HTMLInputElement | null>(null);
-const handleInput = () => {
-  setTimeout(() => {
-    if (addNewTodoInputRef.value) {
-      addNewTodoInputRef.value.focus();
-    }
+// input
+const dataList = ref(["Buy groceries", "Complete homework", "Walk the dog", "Call mom"]);
+const computedDataList = computed(() => {
+  return dataList.value.filter((option) => {
+    return option.toLocaleLowerCase().includes(toDoText.value.toLocaleLowerCase());
+  });
+});
+const isInputFocused = ref(false);
+const setTimeoutId = ref<ReturnType<typeof setTimeout> | null>(null);
+const handleBlur = () => {
+  setTimeoutId.value = setTimeout(() => {
+    isInputFocused.value = false;
   }, 100);
 };
-// const isInputEmpty = computed(() => toDoText.value.trim() === "");
-
-const openOptions = (id: number) => {
-  if (openedOptions.value === id) {
-    openedOptions.value = null;
-    return;
+const handleOptionsFocus = () => {
+  if (setTimeoutId.value !== null) {
+    clearTimeout(setTimeoutId.value);
   }
-  openedOptions.value = id;
 };
-const openedOptionsButtonStyle = computed(() => {
-  if (openedOptions.value === null) return "";
 
+const putIntoTodoText = (text: (typeof dataList.value)[number]) => {
+  toDoText.value = text;
+  isInputFocused.value = false;
+};
+
+const isInputEmpty = computed(() => toDoText.value.trim() === "");
+
+// Computed properties
+const openedOptionsButtonStyle = computed(() => {
+  if (openedOptionsId.value === null) return "";
   return "bg-green-800 rounded-bl-none rounded-br-none";
 });
-
 const completedToDoClass = computed(() => " line-through  text-gray-500");
+const textColor = computed(() => {
+  return globalStore.theme === "dark" ? "text-white" : "text-black";
+});
+const bgColor = computed(() => `bg-${globalStore.theme}`);
+const bgDateColor = computed(() => {
+  return { backgroundColor: globalStore.theme === "dark" ? "#204533" : "#ccefdb" };
+});
 
+// Open options menu
+const openOptions = (id: number) => {
+  if (openedOptionsId.value === id) {
+    openedOptionsId.value = null;
+    return;
+  }
+  openedOptionsId.value = id;
+};
+
+// Delete a todo with confirmation
 const deleteOnConfirm = (todoId: number) => {
   const confirmed = confirm("Are you sure you want to delete this todo?");
   if (confirmed) {
@@ -217,6 +253,7 @@ const deleteOnConfirm = (todoId: number) => {
   }
 };
 
+// Editing functionality
 const editingTextAreaRef = ref<Record<number, HTMLTextAreaElement>>({});
 const editingTodoId = ref<number | null>(null);
 const editingTextArea = ref("");
@@ -225,7 +262,7 @@ const editToDoText = (todoId: number, toDoText: string) => {
   const editFunctionality = () => {
     editingTodoId.value = todoId;
     editingTextArea.value = toDoText;
-    openedOptions.value = null;
+    openedOptionsId.value = null;
     currentActiveTodoText.value = toDoText;
     nextTick(() => {
       if (editingTextAreaRef.value) {
@@ -246,15 +283,21 @@ const editToDoText = (todoId: number, toDoText: string) => {
     }
   }
 };
+
+// Reset editing state
 const resetEditing = () => {
   editingTodoId.value = null;
   editingTextArea.value = "";
-  openedOptions.value = null;
+  openedOptionsId.value = null;
   currentActiveTodoText.value = "";
 };
+
+// Cancel editing
 const cancelEditing = () => {
   resetEditing();
 };
+
+// Save the updated todo text
 const saveTheUpdatedToDoText = () => {
   if (!editingTodoId.value) return;
   toDoStore.updateSingleTodo(editingTodoId.value, (todo) => {
@@ -264,16 +307,8 @@ const saveTheUpdatedToDoText = () => {
   resetEditing();
 };
 
+// Global store
 const globalStore = useGlobalStore();
-const textColor = computed(() => {
-  return globalStore.theme === "dark" ? "text-white" : "text-black";
-});
-const bgColor = computed(() => {
-  return `bg-${globalStore.theme}`;
-});
-const bgDateColor = computed(() => {
-  return { backgroundColor: globalStore.theme === "dark" ? "#204533" : "#ccefdb" };
-});
 
 watch(editingTextArea, (newValue) => {
   // console.log(newValue);
