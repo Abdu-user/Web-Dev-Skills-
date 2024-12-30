@@ -2,7 +2,7 @@
   <div class="container d-flex flex-col justify-center text-center">
     <div
       class="flex flex-col justify-center items-center sticky z-2 top-20 pb-3"
-      :class="bgColor"
+      :class="backgroundColor"
     >
       <!-- To Do settings -->
       <nav class="flex justify-center items-center gap-3">
@@ -14,9 +14,17 @@
         <input
           list="todo-suggestions"
           class="w-full sm:px-4 px-3 py-2 rounded bg-inherit text-inherit"
-          v-model="toDoText"
+          v-model="newTodoText"
+          aria-label="Add a new task"
+          aria-describedby="todo-help-text"
           placeholder="Add a new task"
+          type="text"
         />
+        <small
+          id="todo-help-text"
+          class="sr-only"
+          >Add a new task</small
+        >
         <datalist id="todo-suggestions">
           <option value="Buy groceries"></option>
           <option value="Complete homework"></option>
@@ -24,63 +32,79 @@
           <option value="Call mom"></option>
         </datalist>
         <button
-          @click="addTodo"
+          @click="addNewTodo"
           class="bg-green-600 sm:px-4 px-3 py-2 rounded text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:text-gray-800 transition-all"
           :disabled="isInputEmpty"
+          aria-label="Add this task"
         >
           Add
         </button>
       </div>
     </div>
 
-    <!-- To do Array  -->
-    <ul class="flex flex-col p-3 rounded-lg">
+    <!-- To do Array -->
+    <ul
+      class="flex flex-col p-3 rounded-lg"
+      role="list"
+      aria-live="polite"
+      aria-label="To-do list items"
+    >
       <template
-        v-for="(groupedToDo, date) in toDoStore.groupedTodos"
+        v-for="(groupedTodoItems, date) in todoStore.groupedTodos"
         :key="date"
       >
         <!-- Date -->
         <span
+          role="heading"
           class="mx-auto /bg-color /bg-green-500 /bg-opacity-20 px-2 py-1 rounded-lg"
-          :class="`//sticky //top-64`"
-          :style="bgDateColor"
+          :style="dateBackgroundColor"
+          :aria-label="`Tasks for ${formatDateForDisplay(date)}`"
         >
           {{ formatDateForDisplay(date) }}
         </span>
 
-        <!-- To Do Element  -->
+        <!-- To Do Element -->
         <li
-          v-for="todo in groupedToDo"
+          v-for="todo in groupedTodoItems"
           :key="todo.id"
           class="flex items-start gap-3 py-3 pl-3 pr-0 rounded-lg mb-3"
+          :aria-labelledby="todo.id + 'listItemText'"
+          role="listitem"
         >
-          <!-- To Do Text -->
+          <!-- To Do Text  if Editing -->
           <textarea
-            name="toDo text"
+            name="todo text"
             v-if="todo.id === editingTodoId"
-            v-model="editingTextArea"
+            :id="todo.id + 'listItemText'"
+            v-model="todoEditText"
             class="w-full sm:px-4 px-3 py-2 rounded bg-inherit text-inherit custome-shadow"
-            ref="editingTextAreaRef"
-            @keydown.ctrl.enter="saveTheUpdatedToDoText"
+            ref="todoEditTextAreaRef"
+            @keydown.ctrl.enter="saveUpdatedTodoText"
+            :aria-label="todoEditText"
           ></textarea>
 
+          <!-- To Do Text if not editing -->
           <span
             v-else
-            :class="todo.completed && completedToDoClass"
-            >{{ todo.text }}</span
+            :id="todo.id + 'listItemText'"
+            :class="todo.completed && completedTodoClass"
+            :aria-label="todo.completed ? 'Completed: ' + todo.text : todo.text"
           >
+            {{ todo.text }}
+          </span>
 
           <!-- To Do Buttons -->
-
           <div
             class="ms-auto text-2xl relative text-white"
-            :class="openedOptions === todo.id ? 'z-1' : 'z-0'"
+            :class="openedOptionsId === todo.id ? 'z-1' : 'z-0'"
             v-auto-animate="{ duration: 300 }"
           >
             <button
-              @click="openOptions(todo.id)"
+              @click="toggleOptions(todo.id)"
               class="cursor-pointer px-3 py-1 bg-green-600 rounded-full transition-all duration-700"
-              :class="openedOptions === todo.id && openedOptionsButtonStyle"
+              :aria-expanded="openedOptionsId === todo.id"
+              aria-label="Open options menu for this to-do"
+              title="Open options menu for this to-do"
             >
               ⋮
             </button>
@@ -96,28 +120,37 @@
 
             <div
               class="absolute flex flex-col right-0 text-base bg-green-800 p-3 rounded-3xl rounded-tr-none gap-3"
-              v-if="openedOptions === todo.id"
+              v-if="openedOptionsId === todo.id"
             >
               <!-- if editing buttons -->
               <template v-if="todo.id === editingTodoId">
-                <button @click="saveTheUpdatedToDoText">
+                <button @click="saveUpdatedTodoText">
                   <span class="active:text-vue-color">Save</span>
                 </button>
-                <button @click="cancelEditing">
+                <button @click="cancelEditTodo">
                   <span class="active:text-vue-color">Cancel</span>
                 </button>
               </template>
               <!-- default buttons -->
               <template v-else>
-                <button @click="editToDoText(todo.id, todo.text)">
+                <button @click="startEditTodoText(todo.id, todo.text)">
                   <span class="active:text-vue-color">Edit</span>
                 </button>
 
-                <button @click="toDoStore.toggleTodoComplete(todo.id)">
+                <label class="flex items-center cursor-pointer">
                   <span class="active:text-vue-color">Complete</span>
-                </button>
+                  <div class="rounded-full overflow-hidden ml-2 flex justify-center items-center">
+                    <input
+                      type="checkbox"
+                      class="text-green-600 h-6 w-6 focus:ring-green-500 border-gray-300"
+                      :checked="todo.completed"
+                      @change="todoStore.toggleTodoComplete(todo.id)"
+                      aria-label="Mark as complete"
+                    />
+                  </div>
+                </label>
 
-                <button @click="deleteOnConfirm(todo.id)">
+                <button @click="deleteTodo(todo.id)">
                   <span class="active:text-vue-color">Delete</span>
                 </button>
               </template>
@@ -128,111 +161,105 @@
     </ul>
   </div>
 </template>
-
 <script lang="ts" setup>
 import { useGlobalStore } from "@/stores/GlobalStore";
 import { useToDoStore } from "@/stores/ToDoStore";
 import { addZeroString, formatDateForDisplay } from "@/utils/utils";
 import { computed, nextTick, ref, watch } from "vue";
 
-const toDoText = ref("");
-const toDoStore = useToDoStore();
-toDoStore.getTodosFromStorage();
-const openedOptions = ref<number | null>(1735367445891);
+// Reactive variables
+const newTodoText = ref("");
+const todoStore = useToDoStore();
+todoStore.getTodosFromStorage();
+const openedOptionsId = ref<number | null>(1735367445891);
 
-const addTodo = () => {
-  console.log(isInputEmpty);
-  if (isInputEmpty.value) return;
-
-  toDoStore.addTodo(toDoText.value.trim());
-  toDoText.value = "";
-};
-const isInputEmpty = computed(() => toDoText.value.trim() === "");
-
-const openOptions = (id: number) => {
-  if (openedOptions.value === id) {
-    openedOptions.value = null;
-    return;
-  }
-  openedOptions.value = id;
-};
-const openedOptionsButtonStyle = computed(() => {
-  if (openedOptions.value === null) return "";
-
-  return "bg-green-800 rounded-bl-none rounded-br-none";
+// Computed properties
+const isInputEmpty = computed(() => newTodoText.value.trim() === "");
+const completedTodoClass = computed(() => " line-through text-gray-500");
+const textColor = computed(() => {
+  return useGlobalStore().theme === "dark" ? "text-white" : "text-black";
+});
+const backgroundColor = computed(() => {
+  return `bg-${useGlobalStore().theme}`;
+});
+const dateBackgroundColor = computed(() => {
+  return { backgroundColor: useGlobalStore().theme === "dark" ? "#204533" : "#ccefdb" };
 });
 
-const completedToDoClass = computed(() => " line-through  text-gray-500");
+// Methods
+const addNewTodo = () => {
+  if (isInputEmpty.value) return;
+  todoStore.addTodo(newTodoText.value.trim());
+  newTodoText.value = "";
+};
 
-const deleteOnConfirm = (todoId: number) => {
+const toggleOptions = (id: number) => {
+  openedOptionsId.value = openedOptionsId.value === id ? null : id;
+};
+
+const deleteTodo = (todoId: number) => {
   const confirmed = confirm("Are you sure you want to delete this todo?");
   if (confirmed) {
-    toDoStore.removeTodo(todoId);
+    todoStore.removeTodo(todoId);
   }
 };
 
-const editingTextAreaRef = ref<Record<number, HTMLTextAreaElement>>({});
+const todoEditTextAreaRef = ref<Record<number, HTMLTextAreaElement>>({});
 const editingTodoId = ref<number | null>(null);
-const editingTextArea = ref("");
+const todoEditText = ref("");
 const currentActiveTodoText = ref("");
-const editToDoText = (todoId: number, toDoText: string) => {
-  const editFunctionality = () => {
+
+// Start editing a todo item
+const startEditTodoText = (todoId: number, todoText: string) => {
+  const initializeEditing = () => {
     editingTodoId.value = todoId;
-    editingTextArea.value = toDoText;
-    openedOptions.value = null;
-    currentActiveTodoText.value = toDoText;
+    todoEditText.value = todoText;
+    openedOptionsId.value = null;
+    currentActiveTodoText.value = todoText;
     nextTick(() => {
-      if (editingTextAreaRef.value) {
-        console.log(editingTextAreaRef.value[0]);
-        editingTextAreaRef.value[0].focus();
+      if (todoEditTextAreaRef.value) {
+        todoEditTextAreaRef.value[0].focus();
       }
     });
   };
-  if (editingTodoId.value === null) {
-    editFunctionality();
+
+  if (editingTodoId.value === null || currentActiveTodoText.value === todoEditText.value) {
+    initializeEditing();
   } else {
-    if (currentActiveTodoText.value === editingTextArea.value) {
-      editFunctionality();
-    } else {
-      const confirmed = confirm("Theediting value will not be save! Are you sure you want to continue? ");
-      if (confirmed) {
-        editFunctionality();
-      }
+    const confirmed = confirm("The editing value will not be saved! Are you sure you want to continue?");
+    if (confirmed) {
+      initializeEditing();
     }
   }
 };
+
+// Reset editing state
 const resetEditing = () => {
   editingTodoId.value = null;
-  editingTextArea.value = "";
-  openedOptions.value = null;
+  todoEditText.value = "";
+  openedOptionsId.value = null;
   currentActiveTodoText.value = "";
 };
-const cancelEditing = () => {
+
+// Cancel editing
+const cancelEditTodo = () => {
   resetEditing();
 };
-const saveTheUpdatedToDoText = () => {
+
+// Save updated todo text
+const saveUpdatedTodoText = () => {
   if (!editingTodoId.value) return;
-  toDoStore.updateSingleTodo(editingTodoId.value, (todo) => {
-    todo.text = editingTextArea.value;
+  todoStore.updateSingleTodo(editingTodoId.value, (todo) => {
+    todo.text = todoEditText.value;
     return todo;
   });
   resetEditing();
 };
 
-const globalStore = useGlobalStore();
-const textColor = computed(() => {
-  return globalStore.theme === "dark" ? "text-white" : "text-black";
-});
-const bgColor = computed(() => {
-  return `bg-${globalStore.theme}`;
-});
-const bgDateColor = computed(() => {
-  return { backgroundColor: globalStore.theme === "dark" ? "#204533" : "#ccefdb" };
-});
-
-watch(editingTextArea, (newValue) => {
+// Watchers
+watch(todoEditText, (newValue) => {
   // console.log(newValue);
-  // console.log(editingTextAreaRef);
+  // console.log(todoEditTextAreaRef);
   // test
 });
 </script>

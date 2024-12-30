@@ -20,6 +20,14 @@
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "tests/**/*.ts", "tests/**/*.tsx", "cypress/unit/MobileModalDropDown.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "cypress/unit/MobileModalDropDown.ts",
+    "cypress/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }

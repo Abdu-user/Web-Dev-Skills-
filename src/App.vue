@@ -23,7 +23,7 @@ onMounted(() => {
   globalStore.getState();
   globalStore.updateIsMobile();
   window.addEventListener("resize", globalStore.updateIsMobile);
-  console.log(document.getElementById("window")?.innerHTML);
+  // console.log(document.getElementById("window")?.innerHTML);
 });
 onUnmounted(() => {
   window.removeEventListener("resize", globalStore.updateIsMobile);

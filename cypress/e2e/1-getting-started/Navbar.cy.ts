@@ -6,7 +6,7 @@ describe("Vue app test", () => {
   it('check if "Vue app" text exists and navigation works', () => {
     cy.contains(/Vue App/i);
 
-    const checkLink = (text) => {
+    const checkLink = (text: string | RegExp) => {
       return cy.findByRole("link", { name: text }).should("be.visible").should("exist");
     };
 

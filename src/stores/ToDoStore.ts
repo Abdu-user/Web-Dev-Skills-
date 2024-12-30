@@ -20,7 +20,7 @@ export const useToDoStore = defineStore("todo", {
   }),
   actions: {
     addTodo(text: string) {
-      console.log(new Date());
+      // console.log(new Date());
       const newTodo: ToDo = {
         id: Date.now(),
         text,
@@ -43,7 +43,6 @@ export const useToDoStore = defineStore("todo", {
       this.todos = this.todos.map((todo) => {
         if (todo.id === id) {
           todo.completed = !todo.completed;
-          console.log(todo);
         }
         return todo;
       });
