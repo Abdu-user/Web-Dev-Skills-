@@ -22,26 +22,18 @@
             aria-label="Add a new task"
             placeholder="Add a new task"
             type="text"
-            @focus="isInputFocused = true"
-            @blur="handleBlur"
             ref="todoInputRef"
+            list="datalist-suggestions"
           />
-          <ul
-            :class="bgColor"
-            class="absolute top-14"
-            v-if="isInputFocused"
-          >
-            <li
-              v-for="option in computedDataList"
-              role="option"
-              tabindex="0"
-              @focus="handleOptionsFocus"
-              @keydown="putIntoTodoText(option)"
-              @click="putIntoTodoText(option)"
+          <datalist id="datalist-suggestions">
+            <option
+              v-for="option in dataList"
+              :key="option"
+              @click="focusTodoInput"
             >
               {{ option }}
-            </li>
-          </ul>
+            </option>
+          </datalist>
         </div>
 
         <button
@@ -197,33 +189,25 @@ const addTodo = () => {
 };
 
 // input
-const dataList = ref(["Buy groceries", "Complete homework", "Walk the dog", "Call mom"]);
-const computedDataList = computed(() => {
-  return dataList.value.filter((option) => {
-    return option.toLocaleLowerCase().includes(toDoText.value.toLocaleLowerCase());
-  });
-});
-const isInputFocused = ref(false);
 const todoInputRef = ref<HTMLInputElement | null>(null);
-const setTimeoutId = ref<ReturnType<typeof setTimeout> | null>(null);
-const handleBlur = () => {
-  setTimeoutId.value = setTimeout(() => {
-    isInputFocused.value = false;
-  }, 100);
-};
-const handleOptionsFocus = () => {
-  if (setTimeoutId.value !== null) {
-    clearTimeout(setTimeoutId.value);
-  }
+// Focus the todo input
+const focusTodoInput = async (event: TouchEvent) => {
+  await nextTick();
+  todoInputRef.value?.focus();
 };
 
-const putIntoTodoText = (text: (typeof dataList.value)[number]) => {
-  toDoText.value = text;
-  isInputFocused.value = false;
-  if (todoInputRef.value) {
-    todoInputRef.value.focus();
-  }
-};
+const dataList = ref([
+  "Buy groceries",
+  "Complete homework",
+  "Walk the dog",
+  "Call mom",
+  "Read a book",
+  "Exercise",
+  "Plan the week",
+  "Learn Vue.js",
+  "Meditate",
+  "Cook dinner",
+]);
 
 const isInputEmpty = computed(() => toDoText.value.trim() === "");
 
