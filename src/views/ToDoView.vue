@@ -15,8 +15,10 @@
           v-auto-animate="{ duration: 150 }"
           class="w-full"
         >
+          <!-- Input has a custom datalist -->
           <input
             role="combobox"
+            list="datalist-suggestions"
             class="w-full sm:px-4 px-3 py-2 rounded bg-inherit text-inherit"
             v-model="toDoText"
             aria-label="Add a new task"
@@ -25,19 +27,31 @@
             @focus="isInputFocused = true"
             @blur="handleBlur"
             ref="todoInputRef"
+            @keydown="handleKeydown"
           />
+          <!-- <datalist id="datalist-suggestions">
+            <option v-for="option in computedDataList">{{ option }}</option>
+          </datalist> -->
+
+          <!-- Datalist -->
           <ul
+            v-if="isInputFocused && computedDataList.length"
             :class="bgColor"
-            class="absolute top-14"
-            v-if="isInputFocused"
+            class="absolute top-14 p-3 rounded-2xl gap-2 flex flex-col custom-shadow max-h-40 overflow-auto"
+            aria-label="datalist"
+            @keydown.stop.down.prevent
           >
             <li
               v-for="option in computedDataList"
               role="option"
               tabindex="0"
               @focus="handleOptionsFocus"
-              @keydown="putIntoTodoText(option)"
+              @keydown.prevent="handleKeydown"
+              @keydown.stop.down.prevent
+              @keydown.enter="putIntoTodoText(option)"
               @click="putIntoTodoText(option)"
+              @blur="handleBlur"
+              ref="datalistOptionsRef"
             >
               {{ option }}
             </li>
@@ -90,7 +104,7 @@
             v-if="todo.id === editingTodoId"
             :id="todo.id + 'listItemText'"
             v-model="editingTextArea"
-            class="w-full sm:px-4 px-3 py-2 rounded bg-inherit text-inherit custome-shadow"
+            class="w-full sm:px-4 px-3 py-2 rounded bg-inherit text-inherit custom-shadow"
             ref="editingTextAreaRef"
             @keydown.enter="saveTheUpdatedToDoText"
             :aria-label="editingTextArea"
@@ -196,20 +210,56 @@ const addTodo = () => {
   toDoText.value = "";
 };
 
-// input
-const dataList = ref(["Buy groceries", "Complete homework", "Walk the dog", "Call mom"]);
+// input Datalist
+const dataList = ref(["Buy groceries", "Complete homework", "Walk the dog", "Call mom", "Read a book", "Exercise", "Plan the week"]);
+
 const computedDataList = computed(() => {
-  return dataList.value.filter((option) => {
-    return option.toLocaleLowerCase().includes(toDoText.value.toLocaleLowerCase());
-  });
+  return matchedOptions();
 });
+const matchedOptions = () => {
+  return dataList.value.filter((option) => option.toLowerCase().includes(toDoText.value.toLowerCase().trim()));
+};
+const datalistOptionsRef = ref<Record<number, HTMLLIElement> | null>(null);
+
+const pickedDlistIndex = ref<number | null>(null);
+
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === "ArrowDown") {
+    if (pickedDlistIndex.value === null) {
+      pickedDlistIndex.value = 0;
+    } else if (pickedDlistIndex.value >= computedDataList.value.length - 1) {
+      pickedDlistIndex.value = null;
+
+      todoInputRef.value?.focus();
+      isInputFocused.value = true;
+      return;
+    } else {
+      pickedDlistIndex.value++;
+    }
+    if (datalistOptionsRef.value) {
+      datalistOptionsRef.value[pickedDlistIndex.value].focus();
+    }
+  } else if (e.key === "ArrowUp") {
+    if (pickedDlistIndex.value === null || pickedDlistIndex.value <= 0) {
+      pickedDlistIndex.value = computedDataList.value.length - 1;
+    } else {
+      pickedDlistIndex.value--;
+    }
+    if (datalistOptionsRef.value) {
+      datalistOptionsRef.value[pickedDlistIndex.value].focus();
+    }
+  } else if (e.key === "Escape") {
+    isInputFocused.value = false;
+    pickedDlistIndex.value = null;
+  }
+};
 const isInputFocused = ref(false);
 const todoInputRef = ref<HTMLInputElement | null>(null);
 const setTimeoutId = ref<ReturnType<typeof setTimeout> | null>(null);
 const handleBlur = () => {
   setTimeoutId.value = setTimeout(() => {
     isInputFocused.value = false;
-  }, 100);
+  }, 20);
 };
 const handleOptionsFocus = () => {
   if (setTimeoutId.value !== null) {
@@ -223,6 +273,7 @@ const putIntoTodoText = (text: (typeof dataList.value)[number]) => {
   if (todoInputRef.value) {
     todoInputRef.value.focus();
   }
+  pickedDlistIndex.value = null;
 };
 
 const isInputEmpty = computed(() => toDoText.value.trim() === "");
@@ -320,6 +371,10 @@ watch(editingTextArea, (newValue) => {
   // console.log(editingTextAreaRef);
   // test
 });
+watch(computedDataList, async () => {
+  await nextTick();
+  console.log(datalistOptionsRef.value);
+});
 </script>
 
 <style scoped>
@@ -338,7 +393,7 @@ span {
   /* box-shadow: 0 0 0 1px rgb(142, 142, 142); */
   opacity: 1;
 }
-.custome-shadow {
-  box-shadow: 2px 2px 10px 4px gray;
+.custom-shadow {
+  box-shadow: 2px 2px 8px 4px gray;
 }
 </style>

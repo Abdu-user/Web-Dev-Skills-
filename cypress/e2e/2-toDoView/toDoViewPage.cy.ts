@@ -67,7 +67,7 @@ describe("ToDo View Page", () => {
     // @ts-ignore .scrollIntoView Exist on cypress
     cy.get("li").contains(new RegExp(todoText)).scrollIntoView().should("exist").should("be.visible");
   });
-  it.only("add a new task by selecting from combobox", () => {
+  it("add a new task by selecting from combobox", () => {
     // Ensure the "Add" button is visible, exists, and is initially disabled
     cy.findByRole("button", { name: /add/i }).should("be.visible").should("exist").should("be.disabled");
 
@@ -78,10 +78,11 @@ describe("ToDo View Page", () => {
     cy.findByRole("combobox", { name: /add a new task/i }).focus();
 
     // Select an option from the datalist
-    cy.get("datalist option").each((option, index) => {
+    cy.findAllByRole("option").each((option, index) => {
       if (index !== undefined && index < 4) {
-        const val = option.val();
+        const val = option.text();
         cy.findByRole("combobox", { name: /add a new task/i })
+          .clear() // Ensure the input field is cleared before typing
           .type(val)
           .should("have.value", val);
 
@@ -98,6 +99,37 @@ describe("ToDo View Page", () => {
         cy.get("li").contains(new RegExp(val)).should("exist").should("be.visible");
       }
     });
+  });
+  it.only("add a new task by selecting from combobox using tab and enter", () => {
+    // Ensure the "Add" button is visible, exists, and is initially disabled
+    cy.findByRole("button", { name: /add/i }).should("be.visible").should("exist").should("be.disabled");
+
+    // Ensure the input field is empty initially
+    cy.findByRole("combobox", { name: /add a new task/i }).should("have.value", "");
+
+    // Focus on the input field to trigger the datalist
+    cy.findByRole("combobox", { name: /add a new task/i }).focus();
+
+    // Use tab and enter to select an option from the datalist
+    cy.findByRole("combobox", { name: /add a new task/i })
+      .type("{downarrow}{downarrow}{enter}")
+      .invoke("val")
+      .then((val) => {
+        // Ensure the "Add" button is enabled after selecting the task
+        cy.findByRole("button", { name: /add/i }).should("not.be.disabled").click();
+
+        // Verify the input field is cleared after adding the task
+        cy.findByRole("combobox", { name: /add a new task/i }).should("have.value", "");
+
+        // Ensure the "Add" button is disabled again after adding the task
+        cy.findByRole("button", { name: /add/i }).should("be.disabled");
+
+        // Verify the new task appears in the list
+        cy.get("li")
+          .contains(new RegExp(val as string))
+          .should("exist")
+          .should("be.visible");
+      });
   });
 
   it("delete a single task", () => {
