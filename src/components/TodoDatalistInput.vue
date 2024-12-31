@@ -32,7 +32,7 @@
         :class="index === pickedDlistIndex ? 'outline outline-orange-400 outline-1' : ''"
         :aria-selected="index === pickedDlistIndex"
         aria-live="assertive"
-        @click="todoText = computedDataList[index]"
+        @click="handleOptionClick(index)"
       >
         {{ option }}
       </li>
@@ -46,6 +46,7 @@ import { ref, computed, watch, toRefs } from "vue";
 import { defineProps } from "vue";
 
 import { useToDoStore } from "@/stores/ToDoStore";
+import { nextTick } from "process";
 
 const todoStore = useToDoStore();
 const { todoText } = toRefs(todoStore);
@@ -118,10 +119,18 @@ const handleKeydown = (e: KeyboardEvent) => {
     $emits("addTodo", todoText);
   }
 };
-
+// handleKeydown's last option. Important! Do not separate the watcher further away
 watch(computedDataList, () => {
   pickedDlistIndex.value = null;
 });
+
+const handleOptionClick = (index: number) => {
+  todoText.value = computedDataList.value[index];
+  nextTick(() => {
+    todoInputRef.value?.focus();
+  });
+};
+
 const putDatalistOptionValueToTheTodoText = () => {
   if (pickedDlistIndex.value !== null) {
     todoText.value = computedDataList.value[pickedDlistIndex.value];

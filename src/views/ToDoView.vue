@@ -12,7 +12,7 @@
       <!-- Create a ToDo -->
       <div class="p-3 flex justify-center items-center gap-3 w-full max-w-3xl shadow-md rounded-2xl">
         <!-- Input has a custom datalist -->
-        <CustomDatalistInput
+        <TodoDatalistInput
           :bgColor="bgColor"
           :datalist="datalist"
           @addTodo="addTodo"
@@ -151,7 +151,7 @@
 </template>
 
 <script lang="ts" setup>
-import CustomDatalistInput from "@/components/CustomDatalistInput.vue";
+import TodoDatalistInput from "@/components/TodoDatalistInput.vue";
 import { useGlobalStore } from "@/stores/GlobalStore";
 import { useToDoStore } from "@/stores/ToDoStore";
 import { addZeroString, formatDateForDisplay } from "@/utils/utils";
