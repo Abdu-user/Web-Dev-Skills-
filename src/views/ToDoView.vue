@@ -1,7 +1,7 @@
 <template>
   <div class="container d-flex flex-col justify-center text-center">
     <div
-      class="flex flex-col justify-center items-center sticky z-2 top-20 pb-3 rounded-lg px-4"
+      class="flex flex-col justify-center items-center sticky z-2 top-20 pb-3 rounded-lg sm:px-4"
       :class="globalStore.bgThemeClass"
     >
       <!-- To Do settings -->
