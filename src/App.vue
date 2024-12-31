@@ -1,6 +1,6 @@
 <template>
   <div
-    class="overflow-auto w-100 vh-100 d-flex flex-column mt-1"
+    class="overflow-auto w-100 vh-100 d-flex flex-column"
     id="window"
     :class="containerClass"
     v-auto-animate="{ duration: 200 }"
