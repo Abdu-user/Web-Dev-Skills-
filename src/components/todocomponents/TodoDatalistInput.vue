@@ -6,7 +6,7 @@
     <input
       role="combobox"
       list="datalist-suggestions"
-      class="w-full sm:px-4 px-3 py-2 rounded bg-inherit text-inherit"
+      class="w-full sm:px-4 pr-3 pl-2 py-2 rounded bg-inherit text-inherit"
       v-model="todoText"
       aria-label="Add a new task"
       placeholder="Add a new task"
@@ -127,6 +127,7 @@ const handleOptionClick = (index: number) => {
   setTimeoutId.value && clearTimeout(setTimeoutId.value);
   nextTick(() => {
     todoInputRef.value?.focus();
+    isDatalistOpen.value = true;
   });
 };
 
