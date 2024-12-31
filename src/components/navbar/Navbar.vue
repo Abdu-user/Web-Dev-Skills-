@@ -3,6 +3,7 @@
     class="navbar navbar-expand-lg shadow-lg p-3 z-10 col-12 sticky opacity-100 px-md-4 w-100"
     :class="containerClass"
   >
+    <!-- Vue logo -->
     <a
       class="navbar-brand d-flex align-items-center"
       href="#"
@@ -16,12 +17,26 @@
       <span class="ms-2">Vue App</span>
     </a>
 
+    <!-- Temporary: Toggle gradient button -->
+    <button
+      class="mr-3"
+      :class="
+        globalStore.useGradient
+          ? 'text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500'
+          : 'line-through text-gray-500'
+      "
+      @click="globalStore.toggleUseGradient"
+    >
+      Gradient
+    </button>
+
+    <!-- Toggle Theme button -->
     <ToggleThemeButton
       :theme="theme"
       class-name="me-auto"
     />
 
-    <!-- NavLinks -->
+    <!-- Start: NavLinks -->
     <NavbarLinks
       v-if="!globalStore.isMobile"
       className="d-flex flex-row gap-2"
@@ -30,12 +45,13 @@
     <!-- v-if="isPhoneSize" -->
     <MobileModalDropDown
       v-if="globalStore.isMobile"
-      :childClass="`bg-${theme} px-3 pb-3 pt-1   position-absolute childClass ${mobileComputed}`"
+      :childClass="`${globalStore.bgThemeClass} px-3 pb-3 pt-1   position-absolute childClass ${mobileComputed}`"
       :parentClass="`parentClass position-absolute z-10  bg-black bg-opacity-50`"
       class=" "
     >
       <NavbarLinks />
     </MobileModalDropDown>
+    <!-- End: Navlinks -->
   </nav>
 </template>
 
@@ -54,7 +70,7 @@ const props = defineProps<{
 const globalStore = useGlobalStore();
 
 const containerClass = computed(() => {
-  return `navbar-${props.theme} bg-${props.theme}`;
+  return `navbar-${props.theme} ${globalStore.bgThemeClass}`;
 });
 const mobileComputed = computed(() => {
   return props.theme === "dark" ? "dark-theme-shadow" : "light-theme-shadow";

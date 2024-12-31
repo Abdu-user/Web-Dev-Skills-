@@ -18,7 +18,7 @@
     />
     <ul
       v-if="isDatalistOpen && computedDataList.length"
-      :class="bgColor"
+      :class="globalStore.bgThemeClass"
       class="absolute top-14 py-2 px-1 rounded-2xl flex flex-col custom-shadow max-h-52 overflow-auto md:scrollbar-thin md:scrollbar-thumb-gray-500 md:scrollbar-track-gray-100"
       aria-label="datalist"
       @keydown.stop.down.prevent
@@ -42,18 +42,18 @@
 
 <script lang="ts" setup>
 import { ref, computed, watch, toRefs } from "vue";
-
 import { defineProps } from "vue";
-
 import { useToDoStore } from "@/stores/ToDoStore";
 import { nextTick } from "process";
+import { useGlobalStore } from "@/stores/GlobalStore";
+
+const globalStore = useGlobalStore();
 
 const todoStore = useToDoStore();
 const { todoText } = toRefs(todoStore);
 
 const props = defineProps<{
   datalist: string[];
-  bgColor: string;
 }>();
 const $emits = defineEmits(["addTodo"]);
 

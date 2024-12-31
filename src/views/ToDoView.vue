@@ -1,8 +1,8 @@
 <template>
   <div class="container d-flex flex-col justify-center text-center">
     <div
-      class="flex flex-col justify-center items-center sticky z-2 top-20 pb-3"
-      :class="bgColor"
+      class="flex flex-col justify-center items-center sticky z-2 top-20 pb-3 rounded-lg px-4"
+      :class="globalStore.bgThemeClass"
     >
       <!-- To Do settings -->
 
@@ -11,7 +11,6 @@
       <div class="p-3 flex justify-center items-center gap-3 w-full max-w-3xl shadow-md rounded-2xl">
         <!-- Input has a custom datalist -->
         <TodoDatalistInput
-          :bgColor="bgColor"
           :datalist="datalist"
           @addTodo="addTodo"
         />
@@ -182,7 +181,6 @@ const completedToDoClass = computed(() => " line-through  text-gray-500");
 const textColor = computed(() => {
   return globalStore.theme === "dark" ? "text-white" : "text-black";
 });
-const bgColor = computed(() => `bg-${globalStore.theme}`);
 const bgDateColor = computed(() => {
   return { backgroundColor: globalStore.theme === "dark" ? "#204533" : "#ccefdb" };
 });

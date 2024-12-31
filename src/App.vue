@@ -30,6 +30,16 @@ onUnmounted(() => {
 });
 
 const containerClass = computed(() => {
-  return `bg-${globalStore.theme} text-${globalStore.theme === "dark" ? "light" : "black"}`;
+  const isDarkTheme = globalStore.theme === "dark"; // Determine the theme
+
+  const gradientBg = globalStore.bgThemeClass;
+
+  const textColor = isDarkTheme ? "text-light" : "text-black";
+
+  return `${gradientBg} ${textColor}`;
 });
+
+// const containerClass = computed(() => {
+//   return `bg-${globalStore.theme} text-${globalStore.theme === "dark" ? "light" : "black"}`;
+// });
 </script>
