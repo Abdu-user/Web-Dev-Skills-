@@ -83,8 +83,10 @@
             :class="openedOptionsId === todo.id ? 'z-1' : 'z-0'"
             v-auto-animate="{ duration: 300 }"
           >
+            <!-- Open todo buttons Button -->
             <button
               @click="openOptions(todo.id)"
+              @blur="setTimeBlurCloseOptions"
               class="cursor-pointer px-3 py-1 bg-green-600 rounded-full transition-all duration-700"
               :aria-expanded="openedOptionsId === todo.id"
               aria-label="Open options menu for this to-do"
@@ -104,15 +106,25 @@
             </div>
 
             <div
-              class="absolute flex flex-col right-0 text-base bg-green-800 p-3 rounded-3xl rounded-tr-none gap-3"
+              class="absolute flex flex-col right-0 text-base bg-green-800 p-3 rounded-3xl rounded-tr-none gap-3 bg-opacity-95"
               v-if="openedOptionsId === todo.id"
             >
               <!-- if editing buttons -->
               <template v-if="todo.id === editingTodoId">
-                <button @click="saveTheUpdatedToDoText">
+                <button
+                  @click="
+                    handleClearTimeOut();
+                    saveTheUpdatedToDoText();
+                  "
+                >
                   <span class="active:text-vue-color">Save</span>
                 </button>
-                <button @click="cancelEditing">
+                <button
+                  @click="
+                    handleClearTimeOut();
+                    cancelEditing();
+                  "
+                >
                   <span class="active:text-vue-color">Cancel</span>
                 </button>
               </template>
@@ -122,20 +134,32 @@
                   <span class="active:text-vue-color">Edit</span>
                 </button>
 
-                <label class="flex items-center cursor-pointer">
+                <label
+                  class="flex items-center cursor-pointer"
+                  @blur="setTimeBlurCloseOptions"
+                >
                   <span class="active:text-vue-color">Complete</span>
                   <div class="rounded-full overflow-hidden ml-2 flex justify-center items-center">
                     <input
                       type="checkbox"
                       class="text-green-600 h-6 w-6 focus:ring-green-500 border-gray-300"
                       :checked="todo.completed"
-                      @change="toDoStore.toggleTodoComplete(todo.id)"
+                      @change="
+                        handleClearTimeOut();
+                        toDoStore.toggleTodoComplete(todo.id);
+                      "
+                      @blur="setTimeBlurCloseOptions"
                       aria-label="Mark as complete"
                     />
                   </div>
                 </label>
 
-                <button @click="deleteOnConfirm(todo.id)">
+                <button
+                  @click="
+                    handleClearTimeOut();
+                    deleteOnConfirm(todo.id);
+                  "
+                >
                   <span class="active:text-vue-color">Delete</span>
                 </button>
               </template>
@@ -186,12 +210,22 @@ const bgDateColor = computed(() => {
 });
 
 // Open options menu
+const setTimeoutOpenOptionsId = ref<ReturnType<typeof setTimeout> | null>(null);
+const setTimeBlurCloseOptions = () => {
+  setTimeoutOpenOptionsId.value = setTimeout(() => {
+    openedOptionsId.value = null;
+  }, 140);
+};
 const openOptions = (id: number) => {
   if (openedOptionsId.value === id) {
     openedOptionsId.value = null;
     return;
   }
   openedOptionsId.value = id;
+};
+
+const handleClearTimeOut = () => {
+  setTimeoutOpenOptionsId.value && clearTimeout(setTimeoutOpenOptionsId.value);
 };
 
 // Delete a todo with confirmation
