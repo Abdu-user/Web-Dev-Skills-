@@ -1,3 +1,9 @@
+import { createPinia, setActivePinia } from "pinia";
+import { useToDoStore } from "@/stores/ToDoStore";
+
+const pinia = createPinia();
+setActivePinia(pinia);
+
 const regexOpenTodoMenuButton = /Open options menu for this to-do/i;
 describe("ToDo View Page", () => {
   beforeEach(() => {
@@ -100,7 +106,7 @@ describe("ToDo View Page", () => {
       }
     });
   });
-  it.only("add a new task by selecting from combobox using tab and enter", () => {
+  it("GPT Test: add a new task by selecting from combobox using tab and enter", () => {
     // Ensure the "Add" button is visible, exists, and is initially disabled
     cy.findByRole("button", { name: /add/i }).should("be.visible").should("exist").should("be.disabled");
 
@@ -130,6 +136,94 @@ describe("ToDo View Page", () => {
           .should("exist")
           .should("be.visible");
       });
+  });
+
+  it("select from combox by clicking", () => {
+    const todoStore = useToDoStore();
+    const optionText = todoStore.datalist[0];
+
+    // Focus on the combobox and ensure the option exists
+    cy.findByRole("combobox", { name: /add a new task/i })
+      .click()
+      .focus();
+    cy.contains(optionText).should("exist");
+    cy.findByRole("list", { name: /datalist/i })
+      .findByRole("option", { name: optionText })
+      .should("exist");
+
+    // Close the datalist and ensure the option is not visible
+    cy.findByRole("combobox", { name: /add a new task/i }).type("{esc}");
+    cy.contains(optionText).should("not.exist");
+    cy.findByRole("combobox", { name: /add a new task/i }).should("have.focus");
+
+    // Select the option using keyboard and ensure the value is set
+    cy.findByRole("combobox", { name: /add a new task/i }).type("{ctrl}");
+    cy.contains(optionText);
+    cy.findByRole("combobox", { name: /add a new task/i }).type("{downArrow}{enter}");
+    cy.findByRole("combobox", { name: /add a new task/i }).should("have.value", optionText);
+
+    // Close the datalist and ensure the option is not visible
+    cy.findByRole("combobox", { name: /add a new task/i }).type("{esc}");
+    cy.findByRole("list", { name: /datalist/i })
+      .findByRole("option", { name: optionText })
+      .should("not.exist");
+
+    // Ensure the combobox loses focus
+    cy.findByRole("combobox", { name: /add a new task/i }).type("{esc}");
+    cy.findByRole("combobox", { name: /add a new task/i }).should("not.have.focus");
+  });
+
+  it.only("expect the datalist stays on when typing the correct datalist option is being typed", () => {
+    const todoStore = useToDoStore();
+    const optionText = todoStore.datalist[0];
+
+    // Focus on the combobox and ensure the option exists
+    cy.findByRole("combobox", { name: /add a new task/i })
+      .click()
+      .should("have.focus");
+
+    cy.findByRole("list", { name: /datalist/i })
+      .findByRole("option", { name: optionText })
+      .should("exist");
+
+    cy.findByRole("combobox", { name: /add a new task/i })
+      .type(optionText[0])
+      .should("have.value", optionText[0]);
+
+    cy.findByRole("list", { name: /datalist/i })
+      .findByRole("option", { name: optionText })
+      .should("exist")
+      .click();
+    cy.findByRole("combobox", { name: /add a new task/i }).should("have.value", optionText);
+  });
+
+  it("select from combobox by clicking an option", () => {
+    const todoStore = useToDoStore();
+    const optionText = todoStore.datalist[0];
+
+    // Ensure the input field is empty initially
+    cy.findByRole("combobox", { name: /add a new task/i }).should("have.value", "");
+
+    // Focus on the input field to trigger the datalist
+    cy.findByRole("combobox", { name: /add a new task/i }).focus();
+
+    // Click on the option from the datalist
+    cy.findByRole("option", { name: new RegExp(optionText, "i") }).click();
+
+    // Ensure the input field contains the selected option text
+    cy.findByRole("combobox", { name: /add a new task/i }).should("have.value", optionText);
+
+    // Ensure the "Add" button is enabled after selecting the task
+    cy.findByRole("button", { name: /add/i }).should("not.be.disabled").click();
+
+    // Verify the input field is cleared after adding the task
+    cy.findByRole("combobox", { name: /add a new task/i }).should("have.value", "");
+
+    // Ensure the "Add" button is disabled again after adding the task
+    cy.findByRole("button", { name: /add/i }).should("be.disabled");
+
+    // Verify the new task appears in the list
+    cy.get("li").contains(new RegExp(optionText)).should("exist").should("be.visible");
   });
 
   it("delete a single task", () => {

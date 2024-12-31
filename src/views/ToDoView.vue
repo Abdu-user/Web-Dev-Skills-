@@ -11,52 +11,12 @@
 
       <!-- Create a ToDo -->
       <div class="p-3 flex justify-center items-center gap-3 w-full max-w-3xl shadow-md rounded-2xl">
-        <div
-          v-auto-animate="{ duration: 150 }"
-          class="w-full"
-        >
-          <!-- Input has a custom datalist -->
-          <input
-            role="combobox"
-            list="datalist-suggestions"
-            class="w-full sm:px-4 px-3 py-2 rounded bg-inherit text-inherit"
-            v-model="toDoText"
-            aria-label="Add a new task"
-            placeholder="Add a new task"
-            type="text"
-            @focus="isInputFocused = true"
-            @blur="handleBlur"
-            ref="todoInputRef"
-            @keydown="handleKeydown"
-          />
-          <!-- <datalist id="datalist-suggestions">
-            <option v-for="option in computedDataList">{{ option }}</option>
-          </datalist> -->
-
-          <!-- Datalist -->
-          <ul
-            v-if="isInputFocused && computedDataList.length"
-            :class="bgColor"
-            class="absolute top-14 p-3 rounded-2xl gap-2 flex flex-col custom-shadow max-h-40 overflow-auto"
-            aria-label="datalist"
-            @keydown.stop.down.prevent
-          >
-            <li
-              v-for="option in computedDataList"
-              role="option"
-              tabindex="0"
-              @focus="handleOptionsFocus"
-              @keydown.prevent="handleKeydown"
-              @keydown.stop.down.prevent
-              @keydown.enter="putIntoTodoText(option)"
-              @click="putIntoTodoText(option)"
-              @blur="handleBlur"
-              ref="datalistOptionsRef"
-            >
-              {{ option }}
-            </li>
-          </ul>
-        </div>
+        <!-- Input has a custom datalist -->
+        <CustomDatalistInput
+          :bgColor="bgColor"
+          :datalist="datalist"
+          @addTodo="addTodo"
+        />
 
         <button
           @click="addTodo"
@@ -191,14 +151,15 @@
 </template>
 
 <script lang="ts" setup>
+import CustomDatalistInput from "@/components/CustomDatalistInput.vue";
 import { useGlobalStore } from "@/stores/GlobalStore";
 import { useToDoStore } from "@/stores/ToDoStore";
 import { addZeroString, formatDateForDisplay } from "@/utils/utils";
-import { computed, nextTick, ref, watch } from "vue";
+import { computed, nextTick, ref, toRefs, watch } from "vue";
 
 // State variables
-const toDoText = ref("");
 const toDoStore = useToDoStore();
+const { todoText, datalist } = toRefs(toDoStore);
 toDoStore.getTodosFromStorage();
 const openedOptionsId = ref<number | null>(1735367445891);
 
@@ -206,77 +167,12 @@ const openedOptionsId = ref<number | null>(1735367445891);
 const addTodo = () => {
   if (isInputEmpty.value) return;
 
-  toDoStore.addTodo(toDoText.value.trim());
-  toDoText.value = "";
+  toDoStore.addTodo(todoText.value.trim());
 };
 
 // input Datalist
-const dataList = ref(["Buy groceries", "Complete homework", "Walk the dog", "Call mom", "Read a book", "Exercise", "Plan the week"]);
 
-const computedDataList = computed(() => {
-  return matchedOptions();
-});
-const matchedOptions = () => {
-  return dataList.value.filter((option) => option.toLowerCase().includes(toDoText.value.toLowerCase().trim()));
-};
-const datalistOptionsRef = ref<Record<number, HTMLLIElement> | null>(null);
-
-const pickedDlistIndex = ref<number | null>(null);
-
-const handleKeydown = (e: KeyboardEvent) => {
-  if (e.key === "ArrowDown") {
-    if (pickedDlistIndex.value === null) {
-      pickedDlistIndex.value = 0;
-    } else if (pickedDlistIndex.value >= computedDataList.value.length - 1) {
-      pickedDlistIndex.value = null;
-
-      todoInputRef.value?.focus();
-      isInputFocused.value = true;
-      return;
-    } else {
-      pickedDlistIndex.value++;
-    }
-    if (datalistOptionsRef.value) {
-      datalistOptionsRef.value[pickedDlistIndex.value].focus();
-    }
-  } else if (e.key === "ArrowUp") {
-    if (pickedDlistIndex.value === null || pickedDlistIndex.value <= 0) {
-      pickedDlistIndex.value = computedDataList.value.length - 1;
-    } else {
-      pickedDlistIndex.value--;
-    }
-    if (datalistOptionsRef.value) {
-      datalistOptionsRef.value[pickedDlistIndex.value].focus();
-    }
-  } else if (e.key === "Escape") {
-    isInputFocused.value = false;
-    pickedDlistIndex.value = null;
-  }
-};
-const isInputFocused = ref(false);
-const todoInputRef = ref<HTMLInputElement | null>(null);
-const setTimeoutId = ref<ReturnType<typeof setTimeout> | null>(null);
-const handleBlur = () => {
-  setTimeoutId.value = setTimeout(() => {
-    isInputFocused.value = false;
-  }, 20);
-};
-const handleOptionsFocus = () => {
-  if (setTimeoutId.value !== null) {
-    clearTimeout(setTimeoutId.value);
-  }
-};
-
-const putIntoTodoText = (text: (typeof dataList.value)[number]) => {
-  toDoText.value = text;
-  isInputFocused.value = false;
-  if (todoInputRef.value) {
-    todoInputRef.value.focus();
-  }
-  pickedDlistIndex.value = null;
-};
-
-const isInputEmpty = computed(() => toDoText.value.trim() === "");
+const isInputEmpty = computed(() => todoText.value.trim() === "");
 
 // Computed properties
 const openedOptionsButtonStyle = computed(() => {
@@ -314,12 +210,12 @@ const editingTextAreaRef = ref<Record<number, HTMLTextAreaElement>>({});
 const editingTodoId = ref<number | null>(null);
 const editingTextArea = ref("");
 const currentActiveTodoText = ref("");
-const editToDoText = (todoId: number, toDoText: string) => {
+const editToDoText = (todoId: number, todoText: string) => {
   const editFunctionality = () => {
     editingTodoId.value = todoId;
-    editingTextArea.value = toDoText;
+    editingTextArea.value = todoText;
     openedOptionsId.value = null;
-    currentActiveTodoText.value = toDoText;
+    currentActiveTodoText.value = todoText;
     nextTick(() => {
       if (editingTextAreaRef.value) {
         editingTextAreaRef.value[0].focus();
@@ -371,10 +267,10 @@ watch(editingTextArea, (newValue) => {
   // console.log(editingTextAreaRef);
   // test
 });
-watch(computedDataList, async () => {
-  await nextTick();
-  console.log(datalistOptionsRef.value);
-});
+// watch(computedDataList, async () => {
+//   await nextTick();
+//   console.log(datalistOptionsRef.value);
+// });
 </script>
 
 <style scoped>
@@ -392,8 +288,5 @@ span {
   /* border: 1px solid #7d7d7d; */
   /* box-shadow: 0 0 0 1px rgb(142, 142, 142); */
   opacity: 1;
-}
-.custom-shadow {
-  box-shadow: 2px 2px 8px 4px gray;
 }
 </style>

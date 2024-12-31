@@ -9,6 +9,8 @@ interface ToDo {
 
 interface ToDoState {
   todos: ToDo[];
+  todoText: string;
+  datalist: string[];
 }
 const saveTheTodo = (todos: ToDo[]) => {
   localStorage.setItem("todos", JSON.stringify(todos));
@@ -17,6 +19,8 @@ const saveTheTodo = (todos: ToDo[]) => {
 export const useToDoStore = defineStore("todo", {
   state: (): ToDoState => ({
     todos: [],
+    todoText: "",
+    datalist: ["Buy groceries", "Complete homework", "Walk the dog", "Call mom", "Read a book", "Exercise", "Plan the week"],
   }),
   actions: {
     addTodo(text: string) {
@@ -28,6 +32,7 @@ export const useToDoStore = defineStore("todo", {
         createdDate: new Date(),
       };
       this.todos.push(newTodo);
+      this.todoText = "";
       saveTheTodo(this.todos);
     },
     updateSingleTodo(toDoId: number, cb: (todo: ToDo) => ToDo) {
