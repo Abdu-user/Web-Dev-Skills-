@@ -11,15 +11,15 @@
       aria-label="Add a new task"
       placeholder="Add a new task"
       type="text"
-      @focus="isInputFocused = true"
+      @focus="isDatalistOpen = true"
       @blur="handleBlur"
       ref="todoInputRef"
       @keydown="handleKeydown"
     />
     <ul
-      v-if="isInputFocused && computedDataList.length"
+      v-if="isDatalistOpen && computedDataList.length"
       :class="bgColor"
-      class="absolute top-14 py-2 px-1 rounded-2xl gap-2 flex flex-col custom-shadow max-h-40 overflow-auto"
+      class="absolute top-14 py-2 px-1 rounded-2xl flex flex-col custom-shadow max-h-52 overflow-auto md:scrollbar-thin md:scrollbar-thumb-gray-500 md:scrollbar-track-gray-100"
       aria-label="datalist"
       @keydown.stop.down.prevent
     >
@@ -28,7 +28,7 @@
         ref="datalistOptionsRef"
         role="option"
         v-on:click=""
-        class="px-2 rounded"
+        class="px-2 rounded cursor-pointer hover:outline hover:outline-orange-400 hover:outline-1"
         :class="index === pickedDlistIndex ? 'outline outline-orange-400 outline-1' : ''"
         :aria-selected="index === pickedDlistIndex"
         aria-live="assertive"
@@ -61,71 +61,70 @@ const computedDataList = computed(() => {
   return matchedOptions();
 });
 const matchedOptions = () => {
-  return props.datalist.filter((option) => option.toLowerCase().includes(todoText.value.toLowerCase().trim()));
+  const trimmedTodoText = todoText.value.toLowerCase().trim();
+
+  return props.datalist.filter((option) => {
+    const optionLowerCase = option.toLowerCase();
+
+    // Skip exact matches
+    if (optionLowerCase === trimmedTodoText) {
+      return false;
+    }
+
+    // Return options that partially match
+    return optionLowerCase.includes(trimmedTodoText);
+  });
 };
+
 const datalistOptionsRef = ref<Record<number, HTMLLIElement> | null>(null);
 
 const pickedDlistIndex = ref<number | null>(null);
 
+/// <---
 const handleKeydown = (e: KeyboardEvent) => {
-  // Handle ArrowDown key
-  if (e.key === "ArrowDown") {
-    if (pickedDlistIndex.value === null || pickedDlistIndex.value >= computedDataList.value.length - 1) {
-      pickedDlistIndex.value = 0;
-    } else pickedDlistIndex.value++;
+  const { key } = e;
+  const optionsLength = computedDataList.value.length;
 
-    if (datalistOptionsRef.value !== null) {
-      datalistOptionsRef.value[pickedDlistIndex.value].scrollIntoView({ block: "nearest" });
-    }
-  }
-  // Handle ArrowUp key
-  else if (e.key === "ArrowUp") {
-    if (pickedDlistIndex.value === null || pickedDlistIndex.value <= 0) {
-      pickedDlistIndex.value = computedDataList.value.length - 1;
+  if (key === "ArrowDown" || key === "ArrowUp") {
+    const direction = key === "ArrowDown" ? 1 : -1;
+
+    if (pickedDlistIndex.value === null) {
+      pickedDlistIndex.value = key === "ArrowDown" ? 0 : optionsLength - 1;
     } else {
-      pickedDlistIndex.value--;
+      pickedDlistIndex.value = (pickedDlistIndex.value + direction + optionsLength) % optionsLength;
     }
 
-    if (datalistOptionsRef.value !== null) {
-      datalistOptionsRef.value[pickedDlistIndex.value].scrollIntoView({ block: "nearest" });
+    const selectedOption = datalistOptionsRef.value?.[pickedDlistIndex.value];
+    selectedOption?.scrollIntoView({ block: "nearest" });
+  } else if (key === "Control" && !isDatalistOpen.value) {
+    isDatalistOpen.value = true;
+    pickedDlistIndex.value = null;
+  } else if (key === "Escape") {
+    if (pickedDlistIndex.value === null && isDatalistOpen.value === false) {
+      todoInputRef.value?.blur();
+    } else {
+      isDatalistOpen.value = false;
+      pickedDlistIndex.value = null;
     }
-  }
-  // Handle Control key when input is not focused
-  else if (e.key === "Control" && !isInputFocused.value) {
-    isInputFocused.value = true;
-    pickedDlistIndex.value = null;
-  }
-  // Handle Escape key when input is focused
-  else if (isInputFocused.value && e.key === "Escape") {
-    isInputFocused.value = false;
-    pickedDlistIndex.value = null;
-  }
-  // Handle Escape key when input is not focused
-  else if (e.key === "Escape" && !isInputFocused.value) {
-    todoInputRef.value?.blur();
-    isInputFocused.value = false;
-    pickedDlistIndex.value = null;
-  }
-  // Handle Enter key when an option is picked
-  else if (pickedDlistIndex.value !== null && pickedDlistIndex.value >= 0 && e.key === "enter") {
-    console.log('this is this(pickedDlistIndex.value !==null &&pickedDlistIndex.value >=0&& e.key === "enter") if statement');
-  }
-  // Handle Enter key to put datalist option value to the todo text
-  else if (e.key === "Enter" && pickedDlistIndex.value !== null) {
-    putDatalistOptionValueToTheTodoText();
-  }
-  // Handle Enter key to add a new todo
-  else if (e.key === "Enter") {
-    $emits("addTodo", todoText);
+  } else if (key === "Enter") {
+    if (pickedDlistIndex.value !== null) {
+      putDatalistOptionValueToTheTodoText();
+    } else {
+      $emits("addTodo", todoText);
+    }
   }
 };
 // handleKeydown's last option. Important! Do not separate the watcher further away
 watch(computedDataList, () => {
   pickedDlistIndex.value = null;
 });
+// --->
 
 const handleOptionClick = (index: number) => {
+  console.log(index, computedDataList.value[index]);
   todoText.value = computedDataList.value[index];
+
+  setTimeoutId.value && clearTimeout(setTimeoutId.value);
   nextTick(() => {
     todoInputRef.value?.focus();
   });
@@ -136,12 +135,12 @@ const putDatalistOptionValueToTheTodoText = () => {
     todoText.value = computedDataList.value[pickedDlistIndex.value];
   } else console.error(`pickedDlistIndex.value !== null; when calling this function you can't have pickedDListIndex.value to have null`);
 };
-const isInputFocused = ref(false);
+const isDatalistOpen = ref(false);
 const todoInputRef = ref<HTMLInputElement | null>(null);
 const setTimeoutId = ref<ReturnType<typeof setTimeout> | null>(null);
 const handleBlur = () => {
   setTimeoutId.value = setTimeout(() => {
-    isInputFocused.value = false;
-  }, 20);
+    isDatalistOpen.value = false;
+  }, 140);
 };
 </script>

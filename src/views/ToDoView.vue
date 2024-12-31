@@ -5,10 +5,8 @@
       :class="bgColor"
     >
       <!-- To Do settings -->
-      <nav class="flex justify-center items-center gap-3">
-        <h1 class="h1 m-3 my-4">To-Do List</h1>
-      </nav>
 
+      <TodoNavbarSettings />
       <!-- Create a ToDo -->
       <div class="p-3 flex justify-center items-center gap-3 w-full max-w-3xl shadow-md rounded-2xl">
         <!-- Input has a custom datalist -->
@@ -151,7 +149,8 @@
 </template>
 
 <script lang="ts" setup>
-import TodoDatalistInput from "@/components/TodoDatalistInput.vue";
+import TodoDatalistInput from "@/components/todocomponents/TodoDatalistInput.vue";
+import TodoNavbarSettings from "@/components/todocomponents/TodoNavbarSettings.vue";
 import { useGlobalStore } from "@/stores/GlobalStore";
 import { useToDoStore } from "@/stores/ToDoStore";
 import { addZeroString, formatDateForDisplay } from "@/utils/utils";

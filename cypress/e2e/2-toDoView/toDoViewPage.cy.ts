@@ -151,7 +151,7 @@ describe("ToDo View Page", () => {
       .findByRole("option", { name: optionText })
       .should("exist");
 
-    // Close the datalist and ensure the option is not visible
+    // Close the datalist and ensure the input is focused
     cy.findByRole("combobox", { name: /add a new task/i }).type("{esc}");
     cy.contains(optionText).should("not.exist");
     cy.findByRole("combobox", { name: /add a new task/i }).should("have.focus");
@@ -165,12 +165,23 @@ describe("ToDo View Page", () => {
     // Close the datalist and ensure the option is not visible
     cy.findByRole("combobox", { name: /add a new task/i }).type("{esc}");
     cy.findByRole("list", { name: /datalist/i })
+      .should("not.exist")
       .findByRole("option", { name: optionText })
       .should("not.exist");
 
     // Ensure the combobox loses focus
     cy.findByRole("combobox", { name: /add a new task/i }).type("{esc}");
     cy.findByRole("combobox", { name: /add a new task/i }).should("not.have.focus");
+  });
+
+  it("type the exact value from datalist[0] and expect on the  computedDatalist to not have the exact value", () => {
+    const todoStore = useToDoStore();
+    const optionText = todoStore.datalist[0];
+
+    cy.findByRole("combobox", { name: /add a new task/i }).type(optionText);
+    cy.findByRole("list", { name: /datalist/i })
+      .findByRole("option", { name: optionText })
+      .should("not.exist");
   });
 
   it("expect the datalist stays on when typing the correct datalist option is being typed", () => {
