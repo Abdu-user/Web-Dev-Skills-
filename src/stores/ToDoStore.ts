@@ -11,6 +11,9 @@ interface ToDoState {
   todos: ToDo[];
   todoText: string;
   datalist: string[];
+  possibleDatalistOptions: {
+    [key: string]: number;
+  };
 }
 const saveTheTodo = (todos: ToDo[]) => {
   localStorage.setItem("todos", JSON.stringify(todos));
@@ -21,6 +24,7 @@ export const useToDoStore = defineStore("todo", {
     todos: [],
     todoText: "",
     datalist: ["Buy groceries", "Complete homework", "Walk the dog", "Call mom", "Read a book", "Exercise", "Plan the week"],
+    possibleDatalistOptions: {},
   }),
   actions: {
     addTodo(text: string) {
@@ -32,6 +36,9 @@ export const useToDoStore = defineStore("todo", {
         createdDate: new Date(),
       };
       this.todos.push(newTodo);
+      if (!this.possibleDatalistOptions[text]) this.possibleDatalistOptions[text] = 0;
+      this.possibleDatalistOptions[text]++;
+
       this.todoText = "";
       saveTheTodo(this.todos);
     },

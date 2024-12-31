@@ -15,7 +15,7 @@ export const useGlobalStore = defineStore("globalStore", {
     return {
       theme: "dark",
       isMobile: false,
-      useGradient: true,
+      useGradient: false,
     };
   },
   actions: {
