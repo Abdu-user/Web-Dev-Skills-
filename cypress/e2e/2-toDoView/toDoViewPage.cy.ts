@@ -173,7 +173,7 @@ describe("ToDo View Page", () => {
     cy.findByRole("combobox", { name: /add a new task/i }).should("not.have.focus");
   });
 
-  it.only("expect the datalist stays on when typing the correct datalist option is being typed", () => {
+  it("expect the datalist stays on when typing the correct datalist option is being typed", () => {
     const todoStore = useToDoStore();
     const optionText = todoStore.datalist[0];
 
