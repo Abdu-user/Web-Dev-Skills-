@@ -23,3 +23,7 @@ button:hover span.link:hover {
   /* box-shadow: 0 0 0 1px rgb(142, 142, 142); */
   opacity: 1;
 }
+
+.custom-shadow {
+  box-shadow: 2px 2px 8px 4px gray;
+}

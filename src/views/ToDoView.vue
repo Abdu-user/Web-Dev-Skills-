@@ -11,30 +11,12 @@
 
       <!-- Create a ToDo -->
       <div class="p-3 flex justify-center items-center gap-3 w-full max-w-3xl shadow-md rounded-2xl">
-        <div
-          v-auto-animate="{ duration: 150 }"
-          class="w-full"
-        >
-          <input
-            role="combobox"
-            class="w-full sm:px-4 px-3 py-2 rounded bg-inherit text-inherit"
-            v-model="toDoText"
-            aria-label="Add a new task"
-            placeholder="Add a new task"
-            type="text"
-            ref="todoInputRef"
-            list="datalist-suggestions"
-          />
-          <datalist id="datalist-suggestions">
-            <option
-              v-for="option in dataList"
-              :key="option"
-              @click="focusTodoInput"
-            >
-              {{ option }}
-            </option>
-          </datalist>
-        </div>
+        <!-- Input has a custom datalist -->
+        <CustomDatalistInput
+          :bgColor="bgColor"
+          :datalist="datalist"
+          @addTodo="addTodo"
+        />
 
         <button
           @click="addTodo"
@@ -82,7 +64,7 @@
             v-if="todo.id === editingTodoId"
             :id="todo.id + 'listItemText'"
             v-model="editingTextArea"
-            class="w-full sm:px-4 px-3 py-2 rounded bg-inherit text-inherit custome-shadow"
+            class="w-full sm:px-4 px-3 py-2 rounded bg-inherit text-inherit custom-shadow"
             ref="editingTextAreaRef"
             @keydown.enter="saveTheUpdatedToDoText"
             :aria-label="editingTextArea"
@@ -169,14 +151,15 @@
 </template>
 
 <script lang="ts" setup>
+import CustomDatalistInput from "@/components/CustomDatalistInput.vue";
 import { useGlobalStore } from "@/stores/GlobalStore";
 import { useToDoStore } from "@/stores/ToDoStore";
 import { addZeroString, formatDateForDisplay } from "@/utils/utils";
-import { computed, nextTick, ref, watch } from "vue";
+import { computed, nextTick, ref, toRefs, watch } from "vue";
 
 // State variables
-const toDoText = ref("");
 const toDoStore = useToDoStore();
+const { todoText, datalist } = toRefs(toDoStore);
 toDoStore.getTodosFromStorage();
 const openedOptionsId = ref<number | null>(1735367445891);
 
@@ -184,33 +167,12 @@ const openedOptionsId = ref<number | null>(1735367445891);
 const addTodo = () => {
   if (isInputEmpty.value) return;
 
-  toDoStore.addTodo(toDoText.value.trim());
-  toDoText.value = "";
+  toDoStore.addTodo(todoText.value.trim());
 };
 
-// input
-const todoInputRef = ref<HTMLInputElement | null>(null);
-// Focus the todo input
-const focusTodoInput = async (event: MouseEvent) => {
-  setTimeout(() => {
-    todoInputRef.value?.focus();
-  }, 300);
-};
+// input Datalist
 
-const dataList = ref([
-  "Buy groceries",
-  "Complete homework",
-  "Walk the dog",
-  "Call mom",
-  "Read a book",
-  "Exercise",
-  "Plan the week",
-  "Learn Vue.js",
-  "Meditate",
-  "Cook dinner",
-]);
-
-const isInputEmpty = computed(() => toDoText.value.trim() === "");
+const isInputEmpty = computed(() => todoText.value.trim() === "");
 
 // Computed properties
 const openedOptionsButtonStyle = computed(() => {
@@ -248,12 +210,12 @@ const editingTextAreaRef = ref<Record<number, HTMLTextAreaElement>>({});
 const editingTodoId = ref<number | null>(null);
 const editingTextArea = ref("");
 const currentActiveTodoText = ref("");
-const editToDoText = (todoId: number, toDoText: string) => {
+const editToDoText = (todoId: number, todoText: string) => {
   const editFunctionality = () => {
     editingTodoId.value = todoId;
-    editingTextArea.value = toDoText;
+    editingTextArea.value = todoText;
     openedOptionsId.value = null;
-    currentActiveTodoText.value = toDoText;
+    currentActiveTodoText.value = todoText;
     nextTick(() => {
       if (editingTextAreaRef.value) {
         editingTextAreaRef.value[0].focus();
@@ -305,6 +267,10 @@ watch(editingTextArea, (newValue) => {
   // console.log(editingTextAreaRef);
   // test
 });
+// watch(computedDataList, async () => {
+//   await nextTick();
+//   console.log(datalistOptionsRef.value);
+// });
 </script>
 
 <style scoped>
@@ -322,8 +288,5 @@ span {
   /* border: 1px solid #7d7d7d; */
   /* box-shadow: 0 0 0 1px rgb(142, 142, 142); */
   opacity: 1;
-}
-.custome-shadow {
-  box-shadow: 2px 2px 10px 4px gray;
 }
 </style>
