@@ -191,9 +191,10 @@ const addTodo = () => {
 // input
 const todoInputRef = ref<HTMLInputElement | null>(null);
 // Focus the todo input
-const focusTodoInput = async (event: TouchEvent) => {
-  await nextTick();
-  todoInputRef.value?.focus();
+const focusTodoInput = async (event: MouseEvent) => {
+  setTimeout(() => {
+    todoInputRef.value?.focus();
+  }, 300);
 };
 
 const dataList = ref([
