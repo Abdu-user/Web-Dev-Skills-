@@ -122,18 +122,26 @@
                   <span class="active:text-vue-color">Edit</span>
                 </button>
 
-                <label class="flex items-center cursor-pointer">
-                  <span class="active:text-vue-color">Complete</span>
+                <button
+                  @click="toDoStore.toggleTodoComplete(todo.id)"
+                  class="flex items-center cursor-pointer"
+                  :aria-labelledby="todo.id + 'span'"
+                >
+                  <span
+                    :id="todo.id + 'span'"
+                    class="active:text-vue-color"
+                    >Complete</span
+                  >
                   <div class="rounded-full overflow-hidden ml-2 flex justify-center items-center">
                     <input
+                      tabindex="-1"
                       type="checkbox"
                       class="text-green-600 h-6 w-6 focus:ring-green-500 border-gray-300"
                       :checked="todo.completed"
-                      @change="toDoStore.toggleTodoComplete(todo.id)"
                       aria-label="Mark as complete"
                     />
                   </div>
-                </label>
+                </button>
 
                 <button @click="deleteOnConfirm(todo.id)">
                   <span class="active:text-vue-color">Delete</span>

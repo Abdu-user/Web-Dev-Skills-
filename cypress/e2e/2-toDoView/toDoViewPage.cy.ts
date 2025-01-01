@@ -273,6 +273,7 @@ describe("ToDo View Page", () => {
 
     // Add the task to be completed
     addNewTask(taskToComplete);
+    cy.wait(10);
 
     // Verify the task appears in the list
     cy.findByRole("listitem", { name: new RegExp(taskToComplete, "i") })

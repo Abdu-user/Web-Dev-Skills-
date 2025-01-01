@@ -14,9 +14,14 @@ interface ToDoState {
   possibleDatalistOptions: {
     [key: string]: number;
   };
+  settings: {
+    hideCompleted: boolean;
+  };
 }
-const saveTheTodo = (todos: ToDo[]) => {
-  localStorage.setItem("todos", JSON.stringify(todos));
+const saveTheTodoStoreState = () => {
+  const todoStore = useToDoStore();
+  console.log(JSON.parse(JSON.stringify(todoStore.$state)));
+  localStorage.setItem("todoStoreState", JSON.stringify(todoStore.$state));
 };
 
 export const useToDoStore = defineStore("todo", {
@@ -25,6 +30,9 @@ export const useToDoStore = defineStore("todo", {
     todoText: "",
     datalist: ["Buy groceries", "Complete homework", "Walk the dog", "Call mom", "Read a book", "Exercise", "Plan the week"],
     possibleDatalistOptions: {},
+    settings: {
+      hideCompleted: false,
+    },
   }),
   actions: {
     addTodo(text: string) {
@@ -36,20 +44,21 @@ export const useToDoStore = defineStore("todo", {
         createdDate: new Date(),
       };
       this.todos.push(newTodo);
-      if (!this.possibleDatalistOptions[text]) this.possibleDatalistOptions[text] = 0;
-      this.possibleDatalistOptions[text]++;
+      this.addPossibleDatalistOption(text);
 
       this.todoText = "";
-      saveTheTodo(this.todos);
+      saveTheTodoStoreState();
+    },
+    addPossibleDatalistOption(text: string) {
+      if (!this.possibleDatalistOptions[text]) this.possibleDatalistOptions[text] = 0;
+      this.possibleDatalistOptions[text]++;
     },
     updateSingleTodo(toDoId: number, cb: (todo: ToDo) => ToDo) {
       const todo = this.todos.find((t) => toDoId === t.id);
-      if (!todo) {
-        console.error(`Todo with id ${toDoId} not found`);
-        return;
-      }
+      if (!todo) return console.error(`Todo with id ${toDoId} not found`);
+
       cb(todo);
-      saveTheTodo(this.todos);
+      saveTheTodoStoreState();
     },
     toggleTodoComplete(id: number) {
       this.todos = this.todos.map((todo) => {
@@ -58,21 +67,54 @@ export const useToDoStore = defineStore("todo", {
         }
         return todo;
       });
-      saveTheTodo(this.todos);
+      saveTheTodoStoreState();
     },
 
     removeTodo(id: number) {
       this.todos = this.todos.filter((todo) => todo.id !== id);
-      saveTheTodo(this.todos);
+      saveTheTodoStoreState();
     },
     getTodosFromStorage() {
-      const isTodos = localStorage.getItem("todos");
-      if (isTodos) {
-        this.todos = JSON.parse(isTodos).map((todo: ToDo) => {
+      // Retrieve the serialized todo store state from localStorage
+      const isTodoStore = localStorage.getItem("todoStoreState");
+      if (!isTodoStore) return;
+
+      // Parse the retrieved data into an object
+      const todoStore = JSON.parse(isTodoStore);
+      console.log(todoStore);
+
+      // Bring the Date object back to the date props in todos
+      if (todoStore && todoStore.todos) {
+        this.todos = todoStore.todos.map((todo: ToDo) => {
           todo.createdDate = new Date(todo.createdDate);
           return todo;
         });
       }
+
+      // Restore the todo text
+      this.todoText = todoStore.todoText;
+
+      // Restore the datalist if it exists
+      if (todoStore && todoStore.datalist) {
+        this.datalist = todoStore.datalist;
+      }
+
+      // Restore and update possibleDatalistOptions, adding valid options to the datalist
+      if (todoStore && todoStore.possibleDatalistOptions) {
+        this.possibleDatalistOptions = todoStore.possibleDatalistOptions;
+
+        for (const [key, value] of Object.entries(this.possibleDatalistOptions)) {
+          if (value >= 3 && !this.datalist.includes(key)) {
+            this.datalist.push(key);
+          }
+        }
+      }
+
+      // Restore user settings if they exist
+      if (todoStore && todoStore.settings) {
+        this.settings = todoStore.settings;
+      }
+
       this.updateToDos();
     },
     updateToDos() {
@@ -81,12 +123,26 @@ export const useToDoStore = defineStore("todo", {
         if (!todo.createdDate) todo.createdDate = new Date();
       }
     },
+    settingsActions: () => {
+      return {
+        toggleHideCompleted: () => {
+          const todoStore = useToDoStore();
+          todoStore.settings.hideCompleted = !todoStore.settings.hideCompleted;
+          saveTheTodoStoreState();
+        },
+      };
+    },
   },
   getters: {
-    completedTodos: (state) => state.todos.filter((todo) => todo.completed),
-    pendingTodos: (state) => state.todos.filter((todo) => !todo.completed),
+    conditionalTodos(): ToDo[] {
+      return this.todos.filter((todo) => {
+        if (this.settings.hideCompleted && todo.completed) return false;
+
+        return true;
+      });
+    },
     groupedTodos(): Record<string, ToDo[]> {
-      return this.todos.reduce((group: Record<string, ToDo[]>, todo: ToDo) => {
+      return this.conditionalTodos.reduce((group: Record<string, ToDo[]>, todo: ToDo) => {
         const date = todo.createdDate.toISOString().split("T")[0];
 
         if (!group[date]) {

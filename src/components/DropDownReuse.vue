@@ -1,8 +1,9 @@
 <template>
   <div>
     <button
-      class="navbar-toggler"
+      class=""
       type="button"
+      :class="buttonClass"
       @click="toggleNavbar"
       aria-controls="navbarContent"
       :aria-expanded="isNavbarCollapsed ? 'false' : 'true'"
@@ -38,12 +39,19 @@ import { ref } from "vue";
 
 const props = defineProps<{
   childClass: string;
+  buttonClass?: string;
   parentClass?: string;
+  initialStateBoolean?: boolean;
 }>();
+const $emits = defineEmits(["returnIsOpenState"]);
 const isNavbarCollapsed = ref(false);
+if (typeof props.initialStateBoolean === "boolean") {
+  isNavbarCollapsed.value = props.initialStateBoolean;
+}
 
 const toggleNavbar = () => {
   isNavbarCollapsed.value = !isNavbarCollapsed.value;
+  $emits("returnIsOpenState", isNavbarCollapsed.value);
 };
 </script>
 

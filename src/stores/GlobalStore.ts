@@ -49,7 +49,7 @@ export const useGlobalStore = defineStore("globalStore", {
         // Define slightly darker gradient for dark theme
         const gradientBg = isDarkTheme
           ? "bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700" // Darker dark theme gradient
-          : "bg-gradient-to-r from-yellow-100 via-pink-100 to-red-100"; // Lighter light theme gradient
+          : "bg-gradient-to-r from-green-100 via-green-200 to-green-300"; // Lighter light theme gradient
 
         // Return combined class with conditional gradient and text color
         return gradientBg;

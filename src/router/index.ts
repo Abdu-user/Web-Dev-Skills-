@@ -31,6 +31,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "todo",
     component: ToDoView,
   },
+  {
+    path: "/todo-settings",
+    name: "todoSettings",
+    component: ToDoView,
+  },
 ];
 
 const router = createRouter({

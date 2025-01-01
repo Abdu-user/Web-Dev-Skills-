@@ -9,10 +9,6 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
-body {
-  /* overflow: clip; */
-  /* margin-top: -5px; */
-}
 a:hover,
 button:hover span.link:hover {
   color: var(--vue-green); /* Bootstrap's green color */
