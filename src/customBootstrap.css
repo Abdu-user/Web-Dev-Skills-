@@ -10,3 +10,8 @@
     width: 35% !important;
   }
 }
+
+/* Custom gradient class */
+.bg-gradient-green-gray {
+  background: linear-gradient(to right, hsl(157, 6%, 12%), hsl(150, 10%, 14%), hsl(160, 20%, 10%));
+}

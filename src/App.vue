@@ -8,7 +8,10 @@
     <NavBar :theme="globalStore.theme" />
 
     <RouterView />
-    <div id="innerModals"></div>
+    <div
+      id="innerModals"
+      class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900"
+    ></div>
   </div>
 </template>
 

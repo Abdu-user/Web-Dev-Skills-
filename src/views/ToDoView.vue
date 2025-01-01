@@ -32,6 +32,7 @@
       role="list"
       aria-live="polite"
       aria-label="To-do list items"
+      v-auto-animate
     >
       <template
         v-for="(groupedToDo, date) in toDoStore.groupedTodos"

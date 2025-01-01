@@ -6,8 +6,8 @@ interface GlobalStateType {
   isMobile: boolean;
   useGradient: boolean;
 }
-const saveState = (state: GlobalStateType) => {
-  localStorage.setItem("state", JSON.stringify(state));
+const saveState = () => {
+  localStorage.setItem("state", JSON.stringify(useGlobalStore().$state));
 };
 
 export const useGlobalStore = defineStore("globalStore", {
@@ -21,13 +21,14 @@ export const useGlobalStore = defineStore("globalStore", {
   actions: {
     toggleTheme() {
       this.theme = this.theme === "dark" ? "light" : "dark";
-      saveState({ theme: this.theme, isMobile: this.isMobile, useGradient: this.useGradient });
+      saveState();
     },
     getState() {
       const savedState = localStorage.getItem("state");
       if (savedState) {
         const parsedState: GlobalStateType = JSON.parse(savedState);
         this.theme = parsedState.theme;
+        this.useGradient = parsedState.useGradient;
       }
     },
     updateIsMobile() {
@@ -35,6 +36,7 @@ export const useGlobalStore = defineStore("globalStore", {
     },
     toggleUseGradient() {
       this.useGradient = !this.useGradient;
+      saveState();
     },
   },
   getters: {
@@ -48,10 +50,10 @@ export const useGlobalStore = defineStore("globalStore", {
 
         // Define slightly darker gradient for dark theme
         const gradientBg = isDarkTheme
-          ? "bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700" // Darker dark theme gradient
-          : "bg-gradient-to-r from-green-100 via-green-200 to-green-300"; // Lighter light theme gradient
+          ? "bg-gradient-to-r from-gray-900 via-gray-800 to-gray-800"
+          : //"bg-gradient-green-gray"
+            "bg-gradient-to-r from-green-100 via-green-100 to-green-200";
 
-        // Return combined class with conditional gradient and text color
         return gradientBg;
       } else {
         return "bg-" + this.theme;
