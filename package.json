@@ -12,7 +12,6 @@
     "@formkit/auto-animate": "^0.8.2",
     "@testing-library/vue": "^8.1.0",
     "axios": "^1.7.9",
-    "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "core-js": "^3.8.3",
     "pinia": "^2.3.0",

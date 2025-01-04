@@ -1,6 +1,5 @@
 <template>
-  <span>
-    <!-- class="d-inline-block" -->
+  <span v-auto-animate>
     <span v-if="!isOpen && isTextLong">
       {{ shorterText }}
       <span

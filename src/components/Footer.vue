@@ -1,8 +1,8 @@
 <script setup lang="ts"></script>
 
 <template>
-  <footer class="text-center py-4 mt-5 mt-auto custome-bg-color">
-    <div class="container">
+  <footer class="text-center py-4 mt-auto custome-bg-color">
+    <div class="container mx-auto">
       <p class="mb-2">&copy; 2024 Abdurrakhman. All rights reserved.</p>
       <ul class="list-inline">
         <li class="list-inline-item mx-2">

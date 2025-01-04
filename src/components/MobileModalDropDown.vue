@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ml-auto">
     <button
       class="navbar-toggler"
       type="button"
@@ -9,7 +9,12 @@
       aria-label="Toggle navigation"
     >
       <slot name="icon">
-        <span class="navbar-toggler-icon"></span>
+        <span
+          :class="'navbar-toggler-icon'"
+          class="align-middle bg-no-repeat bg-center bg-[length:100%] bg-[var(--bs-navbar-toggler-icon-bg)] flex justify-center items-center border border-gray-400 px-3 pb-1 rounded-lg focus:border-2 focus:outline-none"
+        >
+          <i class="bi bi-list text-4xl"></i>
+        </span>
       </slot>
     </button>
     <Transition :duration="200">

@@ -1,82 +1,90 @@
 <template>
-  <div class="col-md-6">
-    <h3>Send Us a Message</h3>
+  <div class="w-full px-5">
+    <h3 class="text-xl font-semibold mb-1">Send Us a Message</h3>
     <form @submit.prevent="submitForm">
+      <!-- Name Field -->
       <div
-        class="mb-3"
+        class="mb-4"
         v-auto-animate
       >
         <label
           for="name"
-          class="form-label"
+          class="inline-block mb-1"
           >Name</label
         >
         <input
           type="text"
           id="name"
-          class="form-control"
-          :class="{ 'is-invalid': errors.name }"
+          class="block w-full p-1.5 text-base font-normal leading-6 text-gray-900 appearance-none bg-white bg-clip-padding border border-gray-300 rounded transition ease-in-out focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          :class="{ 'border-red-500 focus:border-red-500 focus:ring-red-500': errors.name }"
           v-model="formData.name"
           placeholder="Enter your name"
         />
         <div
           v-if="errors.name"
-          class="invalid-feedback"
+          class="text-red-500 text-sm mt-1"
         >
           {{ errors.name }}
         </div>
       </div>
+
+      <!-- Email Field -->
       <div
-        class="mb-3"
+        class="mb-4"
         v-auto-animate
       >
         <label
           for="email"
-          class="form-label"
+          class="inline-block mb-1"
           >Email</label
         >
+        <!-- class="mt-1 p-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" -->
         <input
           type="email"
           id="email"
-          class="form-control"
-          :class="{ 'is-invalid': errors.email }"
+          class="block w-full p-1.5 text-base font-normal leading-6 text-gray-900 appearance-none bg-white bg-clip-padding border border-gray-300 rounded transition ease-in-out focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          :class="{ 'border-red-500 focus:border-red-500 focus:ring-red-500': errors.email }"
           v-model="formData.email"
           placeholder="Enter your email"
         />
         <div
           v-if="errors.email"
-          class="invalid-feedback"
+          class="text-red-500 text-sm mt-1"
         >
           {{ errors.email }}
         </div>
       </div>
+
+      <!-- Message Field -->
       <div
-        class="mb-3"
+        class="mb-4"
         v-auto-animate
       >
         <label
           for="message"
-          class="form-label"
+          class="inline-block mb-1"
           >Message</label
         >
         <textarea
           id="message"
-          class="form-control"
+          class="block w-full p-1.5 text-base font-normal leading-6 text-gray-900 appearance-none bg-white bg-clip-padding border border-gray-300 rounded transition ease-in-out focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
           rows="4"
-          :class="{ 'is-invalid': errors.message }"
+          :class="{ 'border-red-500 focus:border-red-500 focus:ring-red-500': errors.message }"
           v-model="formData.message"
           placeholder="Enter your message"
         ></textarea>
         <div
           v-if="errors.message"
-          class="invalid-feedback"
+          class="text-red-500 text-sm mt-1"
         >
           {{ errors.message }}
         </div>
       </div>
+
+      <!-- Submit Button -->
       <button
         type="submit"
-        class="btn btn-primary w-100"
+        class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
       >
         Submit
       </button>
@@ -124,7 +132,7 @@ const validateForm = () => {
     errors.value.email = "Email is required.";
   }
   // else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.value.email)) {
-  //   errors.value.email = "Invalid email address.";}
+  //   errors.value.email = "Invalid email address."; }
 
   if (!formData.value.message) {
     errors.value.message = "Message is required.";

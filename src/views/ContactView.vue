@@ -4,13 +4,11 @@
     class="py-5"
     key="contact"
   >
-    <div class="container">
-      <h1 class="text-center mb-4">Contact Us</h1>
-      <div class="row">
-        <!-- Contact Information -->
+    <div class=" ">
+      <h1 class="text-center text-4xl mb-4">Contact Us</h1>
+      <div class="container mx-auto flex flex-col sm:flex-row gap-4 justify-center items-center">
         <OurInformation />
 
-        <!-- Contact Form -->
         <SendMessage />
       </div>
     </div>
@@ -21,8 +19,8 @@
 <script setup lang="ts">
 import Footer from "../components/Footer.vue";
 import { useGlobalStore } from "@/stores/GlobalStore";
-import OurInformation from "@/components/OurInformation.vue";
-import SendMessage from "@/components/SendMessageForm.vue";
+import OurInformation from "@/components/contact/OurInformation.vue";
+import SendMessage from "@/components/contact/SendMessageForm.vue";
 
 // Access the global store
 const globalStore = useGlobalStore();
