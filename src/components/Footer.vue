@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <footer class="text-center py-4 mt-5 mt-auto custome-bg-color">
+  <footer class="text-center py-4 mt-auto custome-bg-color">
     <div class="container">
       <p class="mb-2">&copy; 2024 Abdurrakhman. All rights reserved.</p>
       <ul class="list-inline">
