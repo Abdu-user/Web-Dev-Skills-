@@ -41,9 +41,6 @@ export const useGlobalStore = defineStore("globalStore", {
   },
   getters: {
     bgThemeClass(): string {
-      // const settings = {
-      //   useGradient: true,
-      // };
       // Todo: implement settings pinia Store
       if (this.useGradient) {
         const isDarkTheme = this.theme === "dark";
@@ -51,8 +48,7 @@ export const useGlobalStore = defineStore("globalStore", {
         // Define slightly darker gradient for dark theme
         const gradientBg = isDarkTheme
           ? "bg-gradient-to-r from-gray-900 via-gray-800 to-gray-800"
-          : //"bg-gradient-green-gray"
-            "bg-gradient-to-r from-green-100 via-green-100 to-green-200";
+          : "bg-gradient-to-r from-white via-gray-100 to-green-100";
 
         return gradientBg;
       } else {
