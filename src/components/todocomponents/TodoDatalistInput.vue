@@ -86,6 +86,7 @@ const handleKeydown = (e: KeyboardEvent) => {
   const optionsLength = computedDataList.value.length;
 
   if (key === "ArrowDown" || key === "ArrowUp") {
+    if (!optionsLength) return;
     const direction = key === "ArrowDown" ? 1 : -1;
 
     if (pickedDlistIndex.value === null) {
