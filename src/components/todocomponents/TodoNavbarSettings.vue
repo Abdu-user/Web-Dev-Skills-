@@ -4,7 +4,6 @@
 
     <div class="flex">
       <DropDownReuse
-        type="secondary"
         button-class=" pb-2 px-1 text-xl leading-none bg-transparent border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 hover:bg-gray-100"
         parent-class="relative z-1 bg-red-400"
         :child-class="`absolute ${globalStore.bgThemeClass} top-2 -left-4 custom-shadow rounded-lg flex flex-col  `"
@@ -101,14 +100,14 @@ watch(isOpen, () => {
 
 <style scoped>
 .spin {
-  animation: spin 0.5s linear forwards;
+  animation: spin 0.5s linear;
 }
 @keyframes spin {
   0% {
     transform: rotate(0deg);
   }
   100% {
-    transform: rotate(120deg);
+    transform: rotate(180deg);
   }
 }
 
@@ -117,7 +116,7 @@ watch(isOpen, () => {
 }
 @keyframes respin {
   0% {
-    transform: rotate(120deg);
+    transform: rotate(180deg);
   }
   100% {
     transform: rotate(0deg);

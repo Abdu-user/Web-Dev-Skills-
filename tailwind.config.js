@@ -7,14 +7,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "vue-color": "#4CAF50",
-        "secondary-color": "#FFC107",
-      },
-      zIndex: {
-        1: "1",
-        2: "2",
-        3: "3",
-        4: "4",
+        "vue-color": "#28a745",
       },
     },
   },

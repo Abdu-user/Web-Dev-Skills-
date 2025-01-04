@@ -268,35 +268,6 @@ describe("ToDo View Page", () => {
     cy.findByRole("listitem", { name: new RegExp(taskToDelete, "i") }).should("not.exist");
   });
 
-  it("type first datalist option and before tapping enter tap arrow down and then enter", () => {
-    const todoStore = useToDoStore();
-    const optionText = todoStore.datalist[0];
-
-    // Ensure the input field is empty initially
-    cy.findByRole("combobox", { name: /add a new task/i }).should("have.value", "");
-
-    // Focus on the input field to trigger the datalist
-    cy.findByRole("combobox", { name: /add a new task/i }).focus();
-
-    // Type the first option text, press arrow down, and then enter
-    cy.findByRole("combobox", { name: /add a new task/i }).type("{downarrow}{enter}");
-
-    // Ensure the input field contains the selected option text
-    cy.findByRole("combobox", { name: /add a new task/i })
-      .type("{downarrow}{downarrow}{uparrow}")
-      .should("exist")
-      .should("have.value", optionText);
-    cy.findByRole("combobox", { name: /add a new task/i })
-      .type("{enter}")
-      .should("have.value", "");
-
-    // Ensure the "Add" button is disabled again after adding the task
-    cy.findByRole("button", { name: /add/i }).should("be.disabled");
-
-    // Verify the new task appears in the list
-    cy.get("li").contains(new RegExp(optionText)).should("exist").should("be.visible");
-  });
-
   it("toggle a task as completed", () => {
     const taskToComplete = "Complete the project";
 

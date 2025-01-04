@@ -17,21 +17,20 @@ const fetchRequiredData = () => {
 </script>
 
 <template>
-  <!-- :class="'navbar-nav ms-auto'" -->
   <ul
-    class="flex justify-center items-center ml-auto pl-0 mb-0 list-none"
+    class="navbar-nav ms-auto"
     :class="className"
     @mouseenter="fetchRequiredData"
   >
     <li
-      :class="'nav-item'"
+      class="nav-item"
       v-for="link in links"
     >
       <RouterLink
         role="link"
-        class="uppercase font-medium"
+        class="nav-link text-capitalize"
         :to="{ name: link.name }"
-        active-class=" border-b-2  border-vue-color  text-vue-color"
+        active-class="activeLink"
         :key="link.name"
         @mouseenter="link.name === 'products' ? fetchRequiredData : null"
         >{{ link.name }}</RouterLink

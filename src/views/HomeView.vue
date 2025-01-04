@@ -2,10 +2,7 @@
   <div
     class="home"
     :key="'home'"
-  >
-    Home
-    <button class="border border-secondary-color">secondary</button>
-  </div>
+  ></div>
 
   <Footer />
 </template>

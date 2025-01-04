@@ -1,7 +1,8 @@
 <template>
   <div>
-    <ButtonUI
-      :type="type"
+    <button
+      class=""
+      type="button"
       :class="buttonClass"
       @click="toggleNavbar"
       aria-controls="navbarContent"
@@ -11,7 +12,7 @@
       <slot name="icon">
         <span class="navbar-toggler-icon"></span>
       </slot>
-    </ButtonUI>
+    </button>
     <Transition :duration="200">
       <div
         v-show="isNavbarCollapsed"
@@ -35,14 +36,12 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import ButtonUI, { ButtonUnionType } from "./designComponents/ButtonUI.vue";
 
 const props = defineProps<{
   childClass: string;
   buttonClass?: string;
   parentClass?: string;
   initialStateBoolean?: boolean;
-  type: ButtonUnionType;
 }>();
 const $emits = defineEmits(["returnIsOpenState"]);
 const isNavbarCollapsed = ref(false);

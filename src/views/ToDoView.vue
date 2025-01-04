@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto d-flex flex-col justify-center text-center">
+  <div class="container d-flex flex-col justify-center text-center">
     <div
       class="flex flex-col justify-center items-center sticky z-2 top-20 pb-3 rounded-lg sm:px-4"
       :class="globalStore.bgThemeClass"
@@ -41,7 +41,8 @@
         <!-- Date -->
         <span
           role="heading"
-          class="mx-auto px-2 py-1 rounded-lg"
+          class="mx-auto /bg-color /bg-green-500 /bg-opacity-20 px-2 py-1 rounded-lg"
+          :style="bgDateColor"
           :aria-label="`Tasks for ${formatDateForDisplay(date)}`"
         >
           {{ formatDateForDisplay(date) }}
@@ -85,7 +86,7 @@
           >
             <button
               @click="openOptions(todo.id)"
-              class="cursor-pointer px-3 py-1 bg-vue-color rounded-full transition-all duration-700"
+              class="cursor-pointer px-3 py-1 bg-green-600 rounded-full transition-all duration-700"
               :aria-expanded="openedOptionsId === todo.id"
               aria-label="Open options menu for this to-do"
               :class="openedOptionsId === todo.id && openedOptionsButtonStyle"
@@ -266,6 +267,16 @@ const saveTheUpdatedToDoText = () => {
 
 // Global store
 const globalStore = useGlobalStore();
+
+watch(editingTextArea, (newValue) => {
+  // console.log(newValue);
+  // console.log(editingTextAreaRef);
+  // test
+});
+// watch(computedDataList, async () => {
+//   await nextTick();
+//   console.log(datalistOptionsRef.value);
+// });
 </script>
 
 <style scoped>

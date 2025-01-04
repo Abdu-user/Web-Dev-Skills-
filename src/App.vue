@@ -1,6 +1,6 @@
 <template>
   <div
-    class="overflow-auto w-full h-screen flex flex-col"
+    class="overflow-auto w-100 vh-100 d-flex flex-column"
     id="window"
     :class="containerClass"
     v-auto-animate="{ duration: 200 }"
@@ -8,7 +8,10 @@
     <NavBar :theme="globalStore.theme" />
 
     <RouterView />
-    <div id="innerModals"></div>
+    <div
+      id="innerModals"
+      class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900"
+    ></div>
   </div>
 </template>
 
@@ -34,7 +37,7 @@ const containerClass = computed(() => {
 
   const gradientBg = globalStore.bgThemeClass;
 
-  const textColor = isDarkTheme ? "text-white" : "text-black";
+  const textColor = isDarkTheme ? "text-light" : "text-black";
 
   return `${gradientBg} ${textColor}`;
 });

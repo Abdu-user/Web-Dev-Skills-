@@ -1,19 +1,20 @@
 <template>
   <nav
-    class="shadow-lg p-3 z-10 w-full sticky opacity-100 px-4 flex gap-1"
+    class="navbar navbar-expand-lg shadow-lg p-3 z-10 col-12 sticky opacity-100 px-md-4 w-100"
     :class="containerClass"
   >
     <!-- Vue logo -->
     <a
-      class="flex items-center"
+      class="navbar-brand d-flex align-items-center"
       href="#"
     >
       <img
         :src="logo"
         alt="Vue Logo"
-        class="h-10"
+        style="height: 40px"
       />
-      <span class="ml-2">Vue App</span>
+
+      <span class="ms-2">Vue App</span>
     </a>
 
     <!-- Temporary: Toggle gradient button -->
@@ -30,22 +31,25 @@
     </button>
 
     <!-- Toggle Theme button -->
-    <ToggleThemeButton :theme="theme" />
-    <!-- class-name="ml-auto" -->
+    <ToggleThemeButton
+      :theme="theme"
+      class-name="me-auto"
+    />
 
     <!-- Start: NavLinks -->
     <NavbarLinks
       v-if="!globalStore.isMobile"
-      class="flex flex-row gap-2"
+      className="d-flex flex-row gap-2"
     />
 
     <!-- v-if="isPhoneSize" -->
     <MobileModalDropDown
       v-if="globalStore.isMobile"
-      :childClass="`${globalStore.bgThemeClass} px-3 pb-3 pt-1 absolute flex-col  ${mobileComputed}`"
-      :parentClass="`absolute top-[70px] left-0 right-0 bottom-0  z-10 bg-black bg-opacity-50`"
+      :childClass="`${globalStore.bgThemeClass} px-3 pb-3 pt-1   position-absolute childClass ${mobileComputed}`"
+      :parentClass="`parentClass position-absolute z-10  bg-black bg-opacity-50`"
+      class=" "
     >
-      <NavbarLinks class="flex flex-col" />
+      <NavbarLinks />
     </MobileModalDropDown>
     <!-- End: Navlinks -->
   </nav>
@@ -58,6 +62,7 @@ import ToggleThemeButton from "../ToggleThemeButton.vue";
 import NavbarLinks from "./NavbarLinks.vue";
 import MobileModalDropDown from "../MobileModalDropDown.vue";
 import { ThemeType, useGlobalStore } from "@/stores/GlobalStore";
+// import globalState, { ThemeType } from "@/globals/state";
 
 const props = defineProps<{
   theme: ThemeType;
@@ -71,7 +76,6 @@ const mobileComputed = computed(() => {
   return props.theme === "dark" ? "dark-theme-shadow" : "light-theme-shadow";
 });
 </script>
-
 <style scoped>
 /* //Mobile styles */
 ::v-deep(.childClass) {
@@ -96,6 +100,7 @@ const mobileComputed = computed(() => {
 
 nav {
   top: -1px !important;
+  /* top: 0; */
   left: 0 !important;
 }
 
