@@ -21,8 +21,8 @@
 <script setup lang="ts">
 import Footer from "../components/Footer.vue";
 import { useGlobalStore } from "@/stores/GlobalStore";
-import OurInformation from "@/components/OurInformation.vue";
-import SendMessage from "@/components/SendMessageForm.vue";
+import OurInformation from "@/components/contact/OurInformation.vue";
+import SendMessage from "@/components/contact/SendMessageForm.vue";
 
 // Access the global store
 const globalStore = useGlobalStore();

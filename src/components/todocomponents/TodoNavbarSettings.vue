@@ -100,7 +100,7 @@ watch(isOpen, () => {
 
 <style scoped>
 .spin {
-  animation: spin 0.5s linear;
+  animation: spin 0.5s linear forwards;
 }
 @keyframes spin {
   0% {
