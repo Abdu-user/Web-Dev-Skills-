@@ -27,8 +27,12 @@ const shortTitle = (text: string, length: number = 30) => (text.length > length 
     class="mb-5"
     v-if="!loading"
   >
-    <h2 class="text-center my-4">Products</h2>
-    <div class="d-grid grid-cols-2 products-container d-md-flex flex-md-wrap justify-content-center align-items-center gap-4 mx-2">
+    <h2 class="text-center my-4 text-4xl">Products</h2>
+    <p class="max-w-lg text-center mx-auto">
+      Our products combine quality, innovation, and reliability to meet your needs. Whether it’s gadgets, essentials, or unique finds, we
+      have something for everyone. Explore our collection and discover the perfect fit for your lifestyle!
+    </p>
+    <div class="mt-8 d-grid grid-cols-2 products-container d-md-flex flex-md-wrap justify-content-center align-items-center gap-4 mx-2">
       <div
         class="flex-md-grow-1 flex-shrink-1 p-3 custom-shadow rounded"
         v-for="product in products"
@@ -39,7 +43,7 @@ const shortTitle = (text: string, length: number = 30) => (text.length > length 
           class="img-container-width aspect-square d-flex justify-content-center align-items-center rounded-5 overflow-hidden bg-white p-2 p-md-4"
         >
           <img
-            class="w-100 mx-auto"
+            class="w-100 mx-auto object-fit"
             :src="product.image"
             alt="Product Image"
             aria-labelledby="product-title"

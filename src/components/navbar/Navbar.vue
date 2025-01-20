@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg shadow-lg p-3 z-10 col-12 sticky opacity-100 px-md-4 w-100"
+    class="navbar navbar-expand-lg p-3 z-10 col-12 sticky opacity-100 px-md-4 w-100"
     :class="containerClass"
   >
     <!-- Vue logo -->
@@ -36,7 +36,7 @@
       class-name="me-auto"
     />
 
-    <!-- Start: NavLinks -->
+    <!-- Start of NavLinks -->
     <NavbarLinks
       v-if="!globalStore.isMobile"
       className="d-flex flex-row gap-2"
@@ -51,7 +51,7 @@
     >
       <NavbarLinks />
     </MobileModalDropDown>
-    <!-- End: Navlinks -->
+    <!-- End of Navlinks -->
   </nav>
 </template>
 

@@ -1,11 +1,8 @@
 <script setup lang="ts">
+import { links } from "@/constants";
 import { useProductsStore } from "@/stores/ProductsStore";
 
 const { className } = defineProps({ className: { type: String, default: "" } });
-type LinkType = {
-  name: string;
-};
-const links: LinkType[] = [{ name: "home" }, { name: "products" }, { name: "todo" }, { name: "about" }, { name: "contact" }];
 
 const productsStore = useProductsStore();
 const fetchRequiredData = () => {

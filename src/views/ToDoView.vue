@@ -39,14 +39,12 @@
         :key="date"
       >
         <!-- Date -->
-        <span
-          role="heading"
+        <h4
           class="mx-auto /bg-color /bg-green-500 /bg-opacity-20 px-2 py-1 rounded-lg"
-          :style="bgDateColor"
           :aria-label="`Tasks for ${formatDateForDisplay(date)}`"
         >
           {{ formatDateForDisplay(date) }}
-        </span>
+        </h4>
 
         <!-- To Do Element -->
         <li

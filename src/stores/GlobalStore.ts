@@ -20,7 +20,14 @@ export const useGlobalStore = defineStore("globalStore", {
   },
   actions: {
     toggleTheme() {
-      this.theme = this.theme === "dark" ? "light" : "dark";
+      if (this.theme === "dark") {
+        this.theme = "light";
+        document.documentElement.classList.remove("dark");
+      } else {
+        document.documentElement.classList.add("dark");
+        this.theme = "dark";
+      }
+      console.log(document.documentElement.classList);
       saveState();
     },
     getState() {
